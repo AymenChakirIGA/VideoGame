@@ -137,3 +137,11 @@ metadata/_edit_group_ = true
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 position = Vector2(-1, 1)
 zoom = Vector2(3, 3)
+
+[node name="RayCast2DLeft" type="RayCast2D" parent="CharacterBody2D"]
+rotation = 1.5708
+target_position = Vector2(0, 10)
+
+[node name="RayCastRight" type="RayCast2D" parent="CharacterBody2D"]
+rotation = -1.5708
+target_position = Vector2(0, 10)
