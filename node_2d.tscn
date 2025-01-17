@@ -132,7 +132,6 @@ shape = SubResource("RectangleShape2D_tjrg2")
 sprite_frames = SubResource("SpriteFrames_36vmv")
 frame = 3
 frame_progress = 0.25597
-metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
 position = Vector2(-1, 1)

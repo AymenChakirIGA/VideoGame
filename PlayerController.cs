@@ -44,15 +44,15 @@ public partial class PlayerController : CharacterBody2D
             dashTimer = DashDuration;
             dashCooldownTimer = DashCooldown;
         }
-        if(Input.IsActionJustPressed("jump") && GetNode<RayCast2D>("RayCastLeft").IsColliding() )
+        if(Input.IsActionJustPressed("Jump") && GetNode<RayCast2D>("RayCast2DLeft").IsColliding() )
         {
-            velocity.Y = -JumpVelocity;
-            velocity.X = JumpVelocity;
-        }
-        else if(Input.IsActionJustPressed("jump") && GetNode<RayCast2D>("RayCastRight").IsColliding())
-        {
-           velocity.Y = -JumpVelocity;
+            velocity.Y = JumpVelocity;
             velocity.X = -JumpVelocity;
+        }
+        else if(Input.IsActionJustPressed("Jump") && GetNode<RayCast2D>("RayCastRight").IsColliding())
+        {
+           velocity.Y = JumpVelocity;
+            velocity.X = JumpVelocity;
         }
         if (isDashing)
         {
