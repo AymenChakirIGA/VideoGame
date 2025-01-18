@@ -129,6 +129,7 @@ position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_tjrg2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_36vmv")
 frame = 3
 frame_progress = 0.25597
@@ -141,6 +142,6 @@ zoom = Vector2(3, 3)
 rotation = 1.5708
 target_position = Vector2(0, 10)
 
-[node name="RayCastRight" type="RayCast2D" parent="CharacterBody2D"]
+[node name="RayCast2DRight" type="RayCast2D" parent="CharacterBody2D"]
 rotation = -1.5708
 target_position = Vector2(0, 10)
