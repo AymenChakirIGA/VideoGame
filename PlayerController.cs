@@ -4,12 +4,12 @@ using System.Diagnostics;
 
 public partial class PlayerController : CharacterBody2D
 {
-    public const float Speed = 5.0f;
+    public const float Speed = 100f;
     public const float JumpVelocityY = -250.0f;
     public const float DashSpeed = 400.0f;
     Vector2 dashDirection = Vector2.Zero;
     private float frinction = .1f;
-    private float acceleration = 0.5f;
+    private float acceleration = 5f;
     private bool isDashing = false;
     private float dashTimer = 0.05f;
     private const float DashDuration = 0.1f; 
@@ -37,7 +37,7 @@ public partial class PlayerController : CharacterBody2D
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity = !isDashing?HorizontalMovement(velocity, direction, Speed): HorizontalMovement(velocity, dashDirection, 600f);
+        velocity = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection * 600f;
 
 
         if (isOnFloor && !wasOnFloor) 
@@ -80,8 +80,9 @@ public partial class PlayerController : CharacterBody2D
         Debug.Print("Direction: " + direction);
         if (direction != Vector2.Zero)
         {
-            velocity.X +=  direction.X * Speed* acceleration;
-            velocity.Y +=  direction.Y * Speed*  acceleration;
+            velocity.X +=  direction.X * acceleration;
+            // velocity.Y +=  direction.Y *  acceleration;
+            velocity.X = Math.Clamp(velocity.X, -Speed, Speed); // ensure that the speed dosn't exceed it limit
         }
         else
         {
