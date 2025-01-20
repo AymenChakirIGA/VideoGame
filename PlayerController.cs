@@ -6,7 +6,9 @@ public partial class PlayerController : CharacterBody2D
 {
     public const float Speed = 100f;
     public const float JumpVelocityY = -250.0f;
+    public const float JumpVelocityX = 100f;
     public const float DashSpeed = 400.0f;
+    public const float WallSlideFriction = 5f; 
     Vector2 dashDirection = Vector2.Zero;
     private float frinction = .1f;
     private float acceleration = 5f;
@@ -14,8 +16,9 @@ public partial class PlayerController : CharacterBody2D
     private float dashTimer = 0.05f;
     private const float DashDuration = 0.1f; 
     private const float DashCooldown = 1.0f; 
-    private float dashCooldownTimer = 0f; 
+    private float dashCooldownTimer = 0f;
     private bool wasOnFloor = false; 
+    private bool isWallSliding = false;
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
@@ -31,13 +34,17 @@ public partial class PlayerController : CharacterBody2D
         //Handle Mouvement: Jumping, Dashing, Wall Jumping
 
         //Jump and Wall Jump
-        velocity = HandleJump(velocity); 
+        velocity = HandleJump(velocity);
 
         //Dash
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection * 600f;
+        velocity.X = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection.X * 600f;
+        //Vertical Movement
+        velocity.Y = VerticalMovement(velocity);
+        
+        velocity.Y = isWallSliding? VerticalMovement(velocity): velocity.Y;
 
 
         if (isOnFloor && !wasOnFloor) 
@@ -59,22 +66,28 @@ public partial class PlayerController : CharacterBody2D
 
     private Vector2 HandleJump(Vector2 velocity){
         //Jumping and wall jumping mechanics
-        if (Input.IsActionJustPressed("Jump") && IsOnFloor())
+        bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding() ;
+        Debug.WriteLine(isOnWall);
+        if (Input.IsActionJustPressed("Jump"))
         {
-            velocity.Y = IsOnFloor()?JumpVelocityY:velocity.Y; //Basic Jump
+            if(IsOnFloor()) velocity.Y = JumpVelocityY; //Basic Jump
 
-            //wall jumping
-            velocity.Y = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() ? JumpVelocityY : velocity.Y;
-            velocity.Y = GetNode<RayCast2D>("RayCast2DRight").IsColliding() ? JumpVelocityY : velocity.Y;
-
-            velocity.X = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() ? JumpVelocityY : velocity.X;
-            velocity.X = GetNode<RayCast2D>("RayCast2DRight").IsColliding() ? JumpVelocityY : velocity.X;
+            else if(isOnWall && Input.IsActionPressed("right")){
+                //Wall jumping right
+                velocity.Y = JumpVelocityY;
+                velocity.X = -JumpVelocityX;
+            }
+            else if(isOnWall && Input.IsActionPressed("left")){
+                velocity.Y = JumpVelocityY;
+                velocity.X = JumpVelocityX;
+            }
 
         }
         return velocity;
     }
 
-    private Vector2 HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
+
+    private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
         Debug.Print("Direction: " + direction);
@@ -89,7 +102,19 @@ public partial class PlayerController : CharacterBody2D
             velocity.X = Mathf.Lerp(velocity.X, 0, frinction);
             // velocity.Y = Mathf.Lerp(velocity.Y, 0, frinction);
         }
-        return velocity;
+        return velocity.X;
+    }
+
+    private float VerticalMovement(Vector2 velocity){
+        //Check if player is on a wall
+        isWallSliding = (GetNode<RayCast2D>("RayCast2DLeft").IsColliding() && Input.IsActionPressed("left") 
+                        || GetNode<RayCast2D>("RayCast2DRight").IsColliding() && Input.IsActionPressed("right"))&&!IsOnFloor();
+        
+        if(isWallSliding){
+            velocity.Y+= WallSlideFriction;
+            velocity.Y = Mathf.Min(velocity.Y,WallSlideFriction);
+        }
+        return velocity.Y;
     }
 
     private Vector2 HandleDashState( Vector2 LastRecordedDirection, double delta = 0.0){
@@ -114,9 +139,6 @@ public partial class PlayerController : CharacterBody2D
             }
         }
         return dashDirection;
-
-
-        
     }
 
 
