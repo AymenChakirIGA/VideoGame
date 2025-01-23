@@ -1,0 +1,73 @@
+[gd_scene load_steps=10 format=3 uid="uid://bf03q4af4885f"]
+
+[ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
+[ext_resource type="Texture2D" uid="uid://dgvj1etp4v4g2" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_idle_anim_strip_4.png" id="2_v0qe5"]
+[ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
+size = Vector2(12, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5w12k"]
+atlas = ExtResource("2_v0qe5")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3ldd"]
+atlas = ExtResource("2_v0qe5")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krauo"]
+atlas = ExtResource("2_v0qe5")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nr110"]
+atlas = ExtResource("2_v0qe5")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_36vmv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5w12k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3ldd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krauo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nr110")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+position = Vector2(135, 117)
+script = ExtResource("1_ov03d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_tjrg2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_36vmv")
+frame = 3
+frame_progress = 0.25597
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-1, 1)
+zoom = Vector2(3, 3)
+
+[node name="RayCast2DLeft" type="RayCast2D" parent="."]
+rotation = 1.5708
+target_position = Vector2(0, 10)
+
+[node name="RayCast2DRight" type="RayCast2D" parent="."]
+rotation = -1.5708
+target_position = Vector2(0, 10)
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_oy706")
