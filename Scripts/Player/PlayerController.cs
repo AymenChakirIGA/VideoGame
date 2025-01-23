@@ -19,6 +19,15 @@ public partial class PlayerController : CharacterBody2D
     private float dashCooldownTimer = 0f;
     private bool wasOnFloor = false; 
     private bool isWallSliding = false;
+    Health health;
+    public override void _Ready()
+    {
+        health = GetNode<Health>("Health");
+    }
+    public override void _Process(double delta)
+    {
+        DebugPlayer();
+    }
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
@@ -67,7 +76,6 @@ public partial class PlayerController : CharacterBody2D
     private Vector2 HandleJump(Vector2 velocity){
         //Jumping and wall jumping mechanics
         bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding() ;
-        Debug.WriteLine(isOnWall);
         if (Input.IsActionJustPressed("Jump"))
         {
             if(IsOnFloor()) velocity.Y = JumpVelocityY; //Basic Jump
@@ -90,7 +98,6 @@ public partial class PlayerController : CharacterBody2D
     private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
-        Debug.Print("Direction: " + direction);
         if (direction != Vector2.Zero)
         {
             velocity.X +=  direction.X * acceleration;
@@ -128,17 +135,18 @@ public partial class PlayerController : CharacterBody2D
             dashDirection = LastRecordedDirection;
             dashTimer = DashDuration;
             dashCooldownTimer = DashCooldown;
-            Debug.Print("Dash");
         }
 
         if(isDashing){
             dashTimer -= (float)delta;
             if(dashTimer <= 0){
                 isDashing = false;
-                Debug.Print("Dash Over");
             }
         }
         return dashDirection;
+    }
+
+    public void DebugPlayer(){
     }
 
 
