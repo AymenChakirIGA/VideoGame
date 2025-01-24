@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjkpdhhp4b1mo"]
+
+[ext_resource type="Texture2D" uid="uid://b7xx67m1v4q5t" path="res://platformer_metroidvania asset pack v1.01/hud elements/hearts_hud.png" id="1_d1ceb"]
+[ext_resource type="Script" path="res://Scripts/Player/HeartGui.cs" id="1_e7ej8"]
+
+[node name="HeartGui" type="Panel"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(16, 17)
+offset_right = 16.0
+offset_bottom = 17.0
+script = ExtResource("1_e7ej8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_d1ceb")
+centered = false

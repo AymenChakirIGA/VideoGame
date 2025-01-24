@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c73qym02dw7sk"]
+
+[ext_resource type="Script" path="res://Scripts/Player/HeartsContainer.cs" id="1_bdpkc"]
+[ext_resource type="PackedScene" uid="uid://bjkpdhhp4b1mo" path="res://Objects/HearthsSystem/heart_gui.tscn" id="2_hdbut"]
+
+[node name="HeartsContainer" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_bdpkc")
+heart = ExtResource("2_hdbut")
