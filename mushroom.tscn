@@ -1,0 +1,86 @@
+[gd_scene load_steps=13 format=3 uid="uid://byhytvxk6ks0b"]
+
+[ext_resource type="Texture2D" uid="uid://batl5ddks1r8x" path="res://platformer_metroidvania asset pack v1.01/enemies sprites/mushroom/mushroom_walk_anim_strip_8.png" id="1_6if1n"]
+[ext_resource type="Script" path="res://Mushroom.cs" id="1_vvxps"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kh3yn"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3s4ob"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj7f2"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e2ctj"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqbni"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbo4n"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu3dx"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2bbg"]
+atlas = ExtResource("1_6if1n")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ditqy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kh3yn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3s4ob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj7f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e2ctj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iqbni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbo4n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu3dx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2bbg")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6utrb"]
+radius = 8.0
+
+[node name="mushroom" type="CharacterBody2D"]
+script = ExtResource("1_vvxps")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ditqy")
+animation = &"walk"
+frame = 4
+frame_progress = 0.0398531
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6utrb")
+
+[node name="GroundRayCast" type="RayCast2D" parent="."]
+target_position = Vector2(9, 16)
