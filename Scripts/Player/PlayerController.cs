@@ -28,6 +28,7 @@ public partial class PlayerController : CharacterBody2D
     {
         DebugPlayer();
     }
+    private bool isInAire = false;
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
@@ -78,8 +79,11 @@ public partial class PlayerController : CharacterBody2D
         bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding() ;
         if (Input.IsActionJustPressed("Jump"))
         {
-            if(IsOnFloor()) velocity.Y = JumpVelocityY; //Basic Jump
-
+            isInAire = true;
+            GetNode<AnimatedSprite2D>("AnimatedSprite2D").Play("jump");
+            if(IsOnFloor()) 
+                velocity.Y = JumpVelocityY; //Basic Jump
+         
             else if(isOnWall && Input.IsActionPressed("right")){
                 //Wall jumping right
                 velocity.Y = JumpVelocityY;
@@ -89,7 +93,11 @@ public partial class PlayerController : CharacterBody2D
                 velocity.Y = JumpVelocityY;
                 velocity.X = JumpVelocityX;
             }
-
+           
+        }
+        else
+        {
+            isInAire = false;
         }
         return velocity;
     }
@@ -100,13 +108,27 @@ public partial class PlayerController : CharacterBody2D
         //Handles the horizontal movement of the player
         if (direction != Vector2.Zero)
         {
+            if(direction.X < 0){
+                GetNode<AnimatedSprite2D>("AnimatedSprite2D").SetFlipH(true);
+            }
+            else
+            {
+               
+                GetNode<AnimatedSprite2D>("AnimatedSprite2D").SetFlipH(false);
+            
+            }
+         
             velocity.X +=  direction.X * acceleration;
             // velocity.Y +=  direction.Y *  acceleration;
             velocity.X = Math.Clamp(velocity.X, -Speed, Speed); // ensure that the speed dosn't exceed it limit
+             if(!isInAire)
+              GetNode<AnimatedSprite2D>("AnimatedSprite2D").Play("run");
         }
         else
         {
             velocity.X = Mathf.Lerp(velocity.X, 0, frinction);
+            if(!isInAire)
+            GetNode<AnimatedSprite2D>("AnimatedSprite2D").Play("idle");
             // velocity.Y = Mathf.Lerp(velocity.Y, 0, frinction);
         }
         return velocity.X;
@@ -125,9 +147,6 @@ public partial class PlayerController : CharacterBody2D
     }
 
     private Vector2 HandleDashState( Vector2 LastRecordedDirection, double delta = 0.0){
-        //Handles the dash state of the player
-
-        //If the player just pressed the dash key and the cooldown is over and the player is not already dashing
         if (Input.IsActionJustPressed("dash") && dashCooldownTimer <= 0 && !isDashing)
         {
             //User Just Pressed Dash Key
