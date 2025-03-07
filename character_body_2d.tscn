@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://br12s2k4trgds"]
+[gd_scene load_steps=25 format=3 uid="uid://br12s2k4trgds"]
 
 [ext_resource type="Texture2D" uid="uid://dgvj1etp4v4g2" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_idle_anim_strip_4.png" id="1_5t21s"]
 [ext_resource type="Script" path="res://PlayerController.cs" id="1_a6f3t"]
+[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://bullet.tscn" id="2_4j6s5"]
 [ext_resource type="Texture2D" uid="uid://bae2m5wc2p8yt" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_jump_up_anim_strip_3.png" id="2_il7j4"]
 [ext_resource type="Texture2D" uid="uid://bapw02vernt0c" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_run_anim_strip_6.png" id="3_kmoyo"]
 [ext_resource type="Texture2D" uid="uid://w4m1pjvrwxb1" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_hit_anim_strip_3.png" id="4_ofbjw"]
@@ -146,6 +147,7 @@ animations = [{
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_a6f3t")
+Bullet = ExtResource("2_4j6s5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
@@ -167,3 +169,8 @@ target_position = Vector2(0, 10)
 [node name="RayCast2DRight" type="RayCast2D" parent="."]
 rotation = -1.5708
 target_position = Vector2(0, 10)
+
+[node name="Muzzle" type="Node2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(8, -1)

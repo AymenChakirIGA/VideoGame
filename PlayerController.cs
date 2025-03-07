@@ -20,6 +20,17 @@ public partial class PlayerController : CharacterBody2D
     private bool wasOnFloor = false; 
     private bool isWallSliding = false;
     private bool isInAire = false;
+
+    [Export]
+    public PackedScene Bullet;
+    private Node2D muzzle;
+    private Vector2 facingDirection = Vector2.Right; 
+
+    public override void _Ready()
+    {
+        muzzle = GetNode<Node2D>("Muzzle");
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
@@ -63,6 +74,31 @@ public partial class PlayerController : CharacterBody2D
         MoveAndSlide();
 
         wasOnFloor = isOnFloor; // Update the floor status
+    }
+
+    public override void _Process(double delta)
+    {
+        if (Input.IsActionPressed("right"))
+        {
+            facingDirection = Vector2.Right;
+        }
+        else if (Input.IsActionPressed("left"))
+        {
+            facingDirection = Vector2.Left;
+        }
+
+        if (Input.IsActionJustPressed("shoot"))
+        {
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        var bullet = (Node2D)Bullet.Instantiate(); 
+        GetParent().AddChild(bullet);
+        bullet.GlobalPosition = muzzle.GlobalPosition; 
+        bullet.Set("Direction", facingDirection); 
     }
 
     private Vector2 HandleJump(Vector2 velocity){
