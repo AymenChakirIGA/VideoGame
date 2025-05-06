@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="game"
-run/main_scene="res://node_2d.tscn"
+run/main_scene="res://Scenes/Levels/Level_0/Level 0.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
 window/size/viewport_width=576
-window/size/viewport_height=324
+window/size/viewport_height=320
 window/stretch/mode="canvas_items"
 
 [dotnet]

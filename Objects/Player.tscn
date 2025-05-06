@@ -43,7 +43,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D"]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
 
@@ -59,7 +59,8 @@ frame_progress = 0.25597
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)
-zoom = Vector2(3, 3)
+limit_bottom = 164
+position_smoothing_enabled = true
 
 [node name="RayCast2DLeft" type="RayCast2D" parent="."]
 rotation = 1.5708
