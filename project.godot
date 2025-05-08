@@ -29,6 +29,7 @@ project/assembly_name="game"
 
 folder_colors={
 "res://Assets/": "green",
+"res://Objects/": "teal",
 "res://Scenes/": "orange"
 }
 

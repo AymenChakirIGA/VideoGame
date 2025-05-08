@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsdgjfecfb2ux"
-path="res://.godot/imported/tileset runrun-c00d.png-deab3896063094e506e557da2f2d0b9f.ctex"
+uid="uid://dlyhqe70gs8is"
+path="res://.godot/imported/Slime.png-d6add6962673babbdc06d3decb57b684.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Level 0/Tileset/tileset runrun-c00d.png"
-dest_files=["res://.godot/imported/tileset runrun-c00d.png-deab3896063094e506e557da2f2d0b9f.ctex"]
+source_file="res://Assets/Sprites/Enemies/Slime.png"
+dest_files=["res://.godot/imported/Slime.png-d6add6962673babbdc06d3decb57b684.ctex"]
 
 [params]
 

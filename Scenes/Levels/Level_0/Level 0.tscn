@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=10 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
-[ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Level 0/Clouds/1.png" id="1_hk03o"]
+[ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_hk03o"]
 [ext_resource type="Script" path="res://Scenes/Levels/Level_0/CloudLayout.cs" id="2_1ltob"]
-[ext_resource type="Texture2D" uid="uid://dnv4ciwl6f4kl" path="res://Assets/Level 0/Clouds/2.png" id="2_lvv70"]
-[ext_resource type="Texture2D" uid="uid://c7mq5mjitkvxy" path="res://Assets/Level 0/Clouds/4.png" id="3_hd128"]
-[ext_resource type="Texture2D" uid="uid://bky8x80vakako" path="res://Assets/Level 0/Tileset/forest v1.png" id="6_onomb"]
+[ext_resource type="Texture2D" uid="uid://dnv4ciwl6f4kl" path="res://Assets/Levels/Level 0/Clouds/2.png" id="2_lvv70"]
+[ext_resource type="Texture2D" uid="uid://c7mq5mjitkvxy" path="res://Assets/Levels/Level 0/Clouds/4.png" id="3_hd128"]
+[ext_resource type="Texture2D" uid="uid://bky8x80vakako" path="res://Assets/Levels/Level 0/Tileset/forest v1.png" id="6_onomb"]
+[ext_resource type="PackedScene" uid="uid://du2f7dtt6qmpv" path="res://Objects/Enemies/slime.tscn" id="7_ro4y0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2ckj"]
 texture = ExtResource("6_onomb")
@@ -88,10 +89,24 @@ script = ExtResource("2_1ltob")
 texture = ExtResource("3_hd128")
 centered = false
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(-190, 164)
+
+[node name="Map" type="Node" parent="."]
+
+[node name="Ground" type="TileMap" parent="Map"]
 tile_set = SubResource("TileSet_l3q03")
 format = 2
 layer_0/tile_data = PackedInt32Array(327675, 65536, 1, 327676, 131072, 1, 327677, 131072, 1, 327678, 131072, 1, 327679, 131072, 1, 262144, 131072, 1, 262145, 131072, 1, 262146, 131072, 1, 262147, 131072, 1, 196614, 65536, 1, 196615, 262144, 1, 65545, 65536, 1, 65546, 131072, 1, 65547, 196608, 1, 65548, 262144, 1, 393211, 65536, 2, 393213, 65536, 2, 393214, 65536, 2, 327680, 65536, 2, 327681, 65536, 2, 327682, 65536, 2, 327683, 262144, 2, 393215, 262144, 2, 393212, 262144, 2)
 
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(-190, 164)
+[node name="Background" type="TileMap" parent="Map"]
+tile_set = SubResource("TileSet_l3q03")
+format = 2
+layer_0/tile_data = PackedInt32Array(196608, 196608, 5, 262143, 131072, 5, 11, 589824, 5, -65525, 589824, 4, 196610, 524288, 5, 196609, 458752, 5, 196604, 262144, 4, 262140, 262144, 5)
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="Slime" parent="Enemies" instance=ExtResource("7_ro4y0")]
+position = Vector2(48, 47)
+scale = Vector2(1.5, 1.5)
+speed = 250.0
