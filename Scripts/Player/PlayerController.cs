@@ -17,12 +17,19 @@ public partial class PlayerController : CharacterBody2D
     private const float DashDuration = 0.1f; 
     private const float DashCooldown = 1.0f; 
     private float dashCooldownTimer = 0f;
+    private float Stamina = 100.0f;
+    private float alphaValue = 0f;
+    private float deltaValue = 0f;
+    private TextureProgressBar textureProgressBar;
     private bool wasOnFloor = false; 
     private bool isWallSliding = false;
+    private bool isRunning = false;
     Health health;
     public override void _Ready()
     {
         health = GetNode<Health>("Health");
+        textureProgressBar = GetNode("Stamina").GetNode<TextureProgressBar>("TextureProgressBar");
+        textureProgressBar.Value = 100;
     }
     public override void _Process(double delta)
     {
@@ -32,6 +39,8 @@ public partial class PlayerController : CharacterBody2D
     {
         Vector2 velocity = Velocity;
         bool isOnFloor = IsOnFloor();
+        deltaValue = (float)delta;
+        
         if (!isOnFloor)
         {
             //Handles Gravity? (it should be handeled directly by the engine)
@@ -49,7 +58,7 @@ public partial class PlayerController : CharacterBody2D
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity.X = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection.X * 600f;
+        velocity.X = !isDashing?HorizontalMovement(velocity, direction, isRunning && Stamina>0f? Speed*1.5f: Speed): dashDirection.X * 600f;
         //Vertical Movement
         velocity.Y = VerticalMovement(velocity);
         
@@ -98,6 +107,7 @@ public partial class PlayerController : CharacterBody2D
     private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
+        isRunning = Input.IsActionPressed("Run");
         if (direction != Vector2.Zero)
         {
             velocity.X +=  direction.X * acceleration;
@@ -109,6 +119,31 @@ public partial class PlayerController : CharacterBody2D
             velocity.X = Mathf.Lerp(velocity.X, 0, frinction);
             // velocity.Y = Mathf.Lerp(velocity.Y, 0, frinction);
         }
+
+        //Running System
+        if (isRunning)
+        {
+            //Stamina is greater than 0, the player will run
+            if(Stamina > 0){
+                Stamina -= 0.1f;
+                textureProgressBar.Value = Stamina;
+            }
+            StaminaShow();
+        }
+        else{
+            if(Stamina <100f){
+                //Stamina Recovery
+                Stamina += 0.1f;
+                textureProgressBar.Value = Stamina;
+                StaminaShow();
+            }
+            else{
+                StaminaHide();
+            } 
+        }
+        Math.Clamp(Stamina, 0f, 100f);
+
+        Debug.Print(Speed.ToString());
         return velocity.X;
     }
 
@@ -144,6 +179,25 @@ public partial class PlayerController : CharacterBody2D
             }
         }
         return dashDirection;
+    }
+
+    private void StaminaHide(){
+        if(alphaValue >0f){
+            alphaValue = Math.Clamp(alphaValue-deltaValue,0f,0.5f);
+        }
+        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G,textureProgressBar.TintUnder.B, alphaValue);
+        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G,textureProgressBar.TintOver.B, alphaValue);
+        textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
+    }
+
+    private void StaminaShow(){
+        if(alphaValue < 0.5f){
+            //Gradually Increase the opacity of the stamina bar
+            alphaValue = Math.Clamp(alphaValue+deltaValue,0f,0.5f);
+        }
+        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G,textureProgressBar.TintUnder.B, alphaValue);
+        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G,textureProgressBar.TintOver.B, alphaValue);
+        textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
     }
 
     public void DebugPlayer(){

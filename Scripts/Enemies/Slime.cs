@@ -49,7 +49,6 @@ public partial class Slime : CharacterBody2D
 			//Going Right
 			if(isFacingRight){
 				if(this.Position.X <= initialPosition.X + rightEdge){
-					Debug.Print(Position.ToString());
 					velocity.X = speed * (float)delta;
 				}
 				else{
@@ -60,11 +59,9 @@ public partial class Slime : CharacterBody2D
 
 			else{
 				if(this.Position.X >= initialPosition.X - leftEdge){
-					Debug.Print(Position.ToString());
 					velocity.X = -speed * (float)delta;
 				}
 				else{
-					Debug.Print("Switch");
 					isFacingRight = !isFacingRight;
 					this.Scale = new Vector2(-this.Scale.X, this.Scale.Y);
 				}

@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=12 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="Texture2D" uid="uid://dgvj1etp4v4g2" path="res://platformer_metroidvania asset pack v1.01/herochar sprites(new)/herochar_idle_anim_strip_4.png" id="2_v0qe5"]
 [ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
+[ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
+[ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
 size = Vector2(12, 15)
@@ -72,3 +74,25 @@ target_position = Vector2(0, 10)
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("3_oy706")
+
+[node name="Stamina" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -15.0
+offset_top = -10.0
+offset_right = 25.0
+offset_bottom = 30.0
+scale = Vector2(0.05, 0.05)
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Stamina"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+value = 33.0
+fill_mode = 4
+texture_under = ExtResource("4_rdqsv")
+texture_over = ExtResource("5_smjss")
+texture_progress = ExtResource("4_rdqsv")
+tint_under = Color(0, 0, 0, 0.262745)
+tint_over = Color(0.162066, 0.162066, 0.162066, 1)
+tint_progress = Color(6.73831e-07, 0.867209, 0.564861, 1)
