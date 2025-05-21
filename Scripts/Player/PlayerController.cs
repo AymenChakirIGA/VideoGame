@@ -4,12 +4,13 @@ using System.Diagnostics;
 
 public partial class PlayerController : CharacterBody2D
 {
-    public const float Speed = 100f;
+    public float Speed = 100f;
     public const float JumpVelocityY = -250.0f;
     public const float JumpVelocityX = 100f;
     public const float DashSpeed = 400.0f;
     public const float WallSlideFriction = 5f; 
     Vector2 dashDirection = Vector2.Zero;
+    Vector2 direction = Vector2.Zero;
     private float frinction = .1f;
     private float acceleration = 5f;
     private bool isDashing = false;
@@ -21,15 +22,19 @@ public partial class PlayerController : CharacterBody2D
     private float alphaValue = 0f;
     private float deltaValue = 0f;
     private TextureProgressBar textureProgressBar;
+    private AnimatedSprite2D sprite;
     private bool wasOnFloor = false; 
     private bool isWallSliding = false;
     private bool isRunning = false;
+    private bool isFacingRight = true;
     Health health;
     public override void _Ready()
     {
         health = GetNode<Health>("Health");
         textureProgressBar = GetNode("Stamina").GetNode<TextureProgressBar>("TextureProgressBar");
         textureProgressBar.Value = 100;
+        sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
     }
     public override void _Process(double delta)
     {
@@ -48,7 +53,7 @@ public partial class PlayerController : CharacterBody2D
         }
 
         //Get the input from the player
-        Vector2 direction = !isDashing? Input.GetVector("left", "right", "up", "down"): dashDirection;
+        direction = !isDashing? Input.GetVector("left", "right", "up", "down"): dashDirection;
         //Handle Mouvement: Jumping, Dashing, Wall Jumping
 
         //Jump and Wall Jump
@@ -58,13 +63,14 @@ public partial class PlayerController : CharacterBody2D
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity.X = !isDashing?HorizontalMovement(velocity, direction, isRunning && Stamina>0f? Speed*1.5f: Speed): dashDirection.X * 600f;
+        velocity.X = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection.X * 600f;
         //Vertical Movement
         velocity.Y = VerticalMovement(velocity);
         
         velocity.Y = isWallSliding? VerticalMovement(velocity): velocity.Y;
 
 
+        //Dash Timer
         if (isOnFloor && !wasOnFloor) 
         {
             dashCooldownTimer = 0f; 
@@ -74,6 +80,20 @@ public partial class PlayerController : CharacterBody2D
         {
             dashCooldownTimer -= (float)delta;
         }
+
+        //Speed Adjustment
+        if (isRunning)
+        {
+            Speed = Mathf.Lerp(Speed, 200f, deltaValue * 5f);
+        }
+        else
+        {
+            Speed = Mathf.Lerp(Speed, 100f, deltaValue * 50f);
+        }
+        Debug.Print(Speed.ToString());
+
+        //Animation Handler:
+        AnimationHandler();
 
 
         Velocity = velocity;
@@ -107,7 +127,7 @@ public partial class PlayerController : CharacterBody2D
     private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
-        isRunning = Input.IsActionPressed("Run");
+        isRunning = Input.IsActionPressed("Run") && Stamina > 0 && direction != Vector2.Zero;
         if (direction != Vector2.Zero)
         {
             velocity.X +=  direction.X * acceleration;
@@ -142,8 +162,6 @@ public partial class PlayerController : CharacterBody2D
             } 
         }
         Math.Clamp(Stamina, 0f, 100f);
-
-        Debug.Print(Speed.ToString());
         return velocity.X;
     }
 
@@ -200,7 +218,38 @@ public partial class PlayerController : CharacterBody2D
         textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
     }
 
+    private void AnimationHandler(){
+        //Handle Rotation of character
+        if(isFacingRight && direction.X<0){
+            isFacingRight = false;
+            sprite.FlipH = true;
+        }
+        else if(!isFacingRight && direction.X>0){
+            isFacingRight = true;
+            sprite.FlipH = false;
+        }
+
+        //Time to Animate
+        if (direction.X != 0 && !isRunning && this.IsOnFloor())
+        {
+            sprite.Play("Walk");
+        }
+        else if (isRunning && this.IsOnFloor())
+        {
+            sprite.Play("Run");
+        }
+        else if(!this.IsOnFloor()){
+            sprite.Play("Jump");
+        }
+        else
+        {
+            sprite.Play("Idle");   
+        }
+        return;
+    }
+
     public void DebugPlayer(){
+        
     }
 
 
