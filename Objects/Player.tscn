@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=28 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="Texture2D" uid="uid://c8vxg32m5amr" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
@@ -48,6 +48,26 @@ region = Rect2(384, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_6w4a4"]
 atlas = ExtResource("2_t0ndv")
 region = Rect2(416, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ifmbr"]
+atlas = ExtResource("2_t0ndv")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3chs"]
+atlas = ExtResource("2_t0ndv")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmneq"]
+atlas = ExtResource("2_t0ndv")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fehkh"]
+atlas = ExtResource("2_t0ndv")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ntaks"]
+atlas = ExtResource("2_t0ndv")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7bl8v"]
 atlas = ExtResource("2_t0ndv")
@@ -117,6 +137,31 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ifmbr")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_h3chs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmneq")
+}],
+"loop": true,
+"name": &"Umbrella_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_fehkh")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_ntaks")
+}],
+"loop": true,
+"name": &"Umbrella_2",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 0.5,
 "texture": SubResource("AtlasTexture_7bl8v")
 }, {
@@ -148,8 +193,8 @@ shape = SubResource("RectangleShape2D_tjrg2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ovccg")
-animation = &"Walk"
-frame_progress = 0.793208
+animation = &"Umbrella_1"
+frame_progress = 0.715618
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)

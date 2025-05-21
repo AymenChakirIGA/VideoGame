@@ -5,7 +5,7 @@ using System.Diagnostics;
 public partial class PlayerController : CharacterBody2D
 {
     public float Speed = 100f;
-    public const float JumpVelocityY = -250.0f;
+    public const float JumpVelocityY = -350.0f;
     public const float JumpVelocityX = 100f;
     public const float DashSpeed = 400.0f;
     public const float WallSlideFriction = 5f; 
@@ -21,12 +21,15 @@ public partial class PlayerController : CharacterBody2D
     private float Stamina = 100.0f;
     private float alphaValue = 0f;
     private float deltaValue = 0f;
+    private float gravityController = 1f;
     private TextureProgressBar textureProgressBar;
     private AnimatedSprite2D sprite;
     private bool wasOnFloor = false; 
     private bool isWallSliding = false;
     private bool isRunning = false;
     private bool isFacingRight = true;
+    private bool isGliding = false;
+    private bool canGlide = false;
     Health health;
     public override void _Ready()
     {
@@ -49,7 +52,7 @@ public partial class PlayerController : CharacterBody2D
         if (!isOnFloor)
         {
             //Handles Gravity? (it should be handeled directly by the engine)
-            velocity += GetGravity() * (float)delta;
+            velocity += GetGravity() * (float)delta * gravityController;
         }
 
         //Get the input from the player
@@ -58,6 +61,8 @@ public partial class PlayerController : CharacterBody2D
 
         //Jump and Wall Jump
         velocity = HandleJump(velocity);
+
+        HandleGlide(velocity);
 
         //Dash
         dashDirection = HandleDashState(direction, delta);
@@ -86,11 +91,14 @@ public partial class PlayerController : CharacterBody2D
         {
             Speed = Mathf.Lerp(Speed, 200f, deltaValue * 5f);
         }
+        else if (isGliding)
+        {
+            Speed = Mathf.Lerp(Speed, 170f, deltaValue * 5f);
+        }
         else
         {
             Speed = Mathf.Lerp(Speed, 100f, deltaValue * 50f);
         }
-        Debug.Print(Speed.ToString());
 
         //Animation Handler:
         AnimationHandler();
@@ -107,14 +115,19 @@ public partial class PlayerController : CharacterBody2D
         bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding() ;
         if (Input.IsActionJustPressed("Jump"))
         {
-            if(IsOnFloor()) velocity.Y = JumpVelocityY; //Basic Jump
-
-            else if(isOnWall && Input.IsActionPressed("right")){
+            if (IsOnFloor())
+            {
+                velocity.Y = JumpVelocityY; //Basic Jump  
+                canGlide = false;
+            }
+            else if (isOnWall && Input.IsActionPressed("right"))
+            {
                 //Wall jumping right
                 velocity.Y = JumpVelocityY;
                 velocity.X = -JumpVelocityX;
             }
-            else if(isOnWall && Input.IsActionPressed("left")){
+            else if (isOnWall && Input.IsActionPressed("left"))
+            {
                 velocity.Y = JumpVelocityY;
                 velocity.X = JumpVelocityX;
             }
@@ -123,14 +136,39 @@ public partial class PlayerController : CharacterBody2D
         return velocity;
     }
 
+    private void HandleGlide(Vector2 velocity)
+    {
+        if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide)
+        {
+            //Gliding when it's not on floor
+            isGliding = true;
+            if (velocity.Y >0)
+            {
+                gravityController = 0.08f;
+            }
+        }
+        else
+        {
+            //end of gliding state
+            isGliding = false;
+            gravityController = 1f;
+
+        }
+        if (!canGlide)
+        {
+            // Handle the case when the charachter just jumped
+            canGlide = Input.IsActionJustReleased("Jump");
+        }
+    }
+
 
     private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
-        isRunning = Input.IsActionPressed("Run") && Stamina > 0 && direction != Vector2.Zero;
+        isRunning = Input.IsActionPressed("Run") && Stamina > 0 && direction != Vector2.Zero && !isGliding;
         if (direction != Vector2.Zero)
         {
-            velocity.X +=  direction.X * acceleration;
+            velocity.X += direction.X * acceleration;
             // velocity.Y +=  direction.Y *  acceleration;
             velocity.X = Math.Clamp(velocity.X, -Speed, Speed); // ensure that the speed dosn't exceed it limit
         }
@@ -144,22 +182,26 @@ public partial class PlayerController : CharacterBody2D
         if (isRunning)
         {
             //Stamina is greater than 0, the player will run
-            if(Stamina > 0){
+            if (Stamina > 0)
+            {
                 Stamina -= 0.1f;
                 textureProgressBar.Value = Stamina;
             }
             StaminaShow();
         }
-        else{
-            if(Stamina <100f){
+        else
+        {
+            if (Stamina < 100f)
+            {
                 //Stamina Recovery
                 Stamina += 0.1f;
                 textureProgressBar.Value = Stamina;
                 StaminaShow();
             }
-            else{
+            else
+            {
                 StaminaHide();
-            } 
+            }
         }
         Math.Clamp(Stamina, 0f, 100f);
         return velocity.X;
@@ -238,12 +280,17 @@ public partial class PlayerController : CharacterBody2D
         {
             sprite.Play("Run");
         }
-        else if(!this.IsOnFloor()){
+        else if (!this.IsOnFloor() && !isGliding)
+        {
             sprite.Play("Jump");
+        }
+        else if (isGliding)
+        {
+            sprite.Play("Umbrella_2");
         }
         else
         {
-            sprite.Play("Idle");   
+            sprite.Play("Idle");
         }
         return;
     }
