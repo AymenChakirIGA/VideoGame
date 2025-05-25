@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=29 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
+[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="2_mbj7k"]
 [ext_resource type="Texture2D" uid="uid://c8vxg32m5amr" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
 [ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
@@ -185,6 +186,7 @@ animations = [{
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
+BulletScene = ExtResource("2_mbj7k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
@@ -233,3 +235,6 @@ texture_progress = ExtResource("4_rdqsv")
 tint_under = Color(0, 0, 0, 0.262745)
 tint_over = Color(0.162066, 0.162066, 0.162066, 1)
 tint_progress = Color(6.73831e-07, 0.867209, 0.564861, 1)
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(20, -4)

@@ -11,7 +11,7 @@ public partial class PlayerController : CharacterBody2D
     public const float WallSlideFriction = 5f; 
     Vector2 dashDirection = Vector2.Zero;
     Vector2 direction = Vector2.Zero;
-    private float frinction = .1f;
+    private float friction = .1f;
     private float acceleration = 5f;
     private bool isDashing = false;
     private float dashTimer = 0.05f;
@@ -31,17 +31,32 @@ public partial class PlayerController : CharacterBody2D
     private bool isGliding = false;
     private bool canGlide = false;
     Health health;
+    [Export]
+    public PackedScene BulletScene; // Drag your bullet.tscn here in the editor
+
+    private Node2D muzzle;
+    private Vector2 facingDirection = Vector2.Right; // Default facing direction
+
     public override void _Ready()
     {
         health = GetNode<Health>("Health");
         textureProgressBar = GetNode("Stamina").GetNode<TextureProgressBar>("TextureProgressBar");
         textureProgressBar.Value = 100;
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-
+        muzzle = GetNode<Node2D>("Muzzle");
     }
     public override void _Process(double delta)
     {
         DebugPlayer();
+        // Update facing direction (optional, based on your movement logic)
+        if (Input.IsActionPressed("right"))
+            facingDirection = Vector2.Right;
+        else if (Input.IsActionPressed("left"))
+            facingDirection = Vector2.Left;
+
+        // Shoot when the shoot button is pressed
+        if (Input.IsActionJustPressed("shoot"))
+            Shoot();
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -174,8 +189,8 @@ public partial class PlayerController : CharacterBody2D
         }
         else
         {
-            velocity.X = Mathf.Lerp(velocity.X, 0, frinction);
-            // velocity.Y = Mathf.Lerp(velocity.Y, 0, frinction);
+            velocity.X = Mathf.Lerp(velocity.X, 0, friction);
+            // velocity.Y = Mathf.Lerp(velocity.Y, 0, friction);
         }
 
         //Running System
@@ -260,15 +275,22 @@ public partial class PlayerController : CharacterBody2D
         textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
     }
 
-    private void AnimationHandler(){
+    private void AnimationHandler()
+    {
         //Handle Rotation of character
-        if(isFacingRight && direction.X<0){
+        if (isFacingRight && direction.X < 0)
+        {
             isFacingRight = false;
             sprite.FlipH = true;
+            // Move muzzle to the left
+            muzzle.Position = new Vector2(-Math.Abs(muzzle.Position.X), muzzle.Position.Y);
         }
-        else if(!isFacingRight && direction.X>0){
+        else if (!isFacingRight && direction.X > 0)
+        {
             isFacingRight = true;
             sprite.FlipH = false;
+            // Move muzzle to the right
+            muzzle.Position = new Vector2(Math.Abs(muzzle.Position.X), muzzle.Position.Y);
         }
 
         //Time to Animate
@@ -297,6 +319,26 @@ public partial class PlayerController : CharacterBody2D
 
     public void DebugPlayer(){
         
+    }
+
+    private void Shoot()
+    {
+        if (BulletScene == null || muzzle == null)
+        {
+            GD.PrintErr("BulletScene or Muzzle not set!");
+            return;
+        }
+        var bullet = (Bullet)BulletScene.Instantiate();
+        bullet.Position = muzzle.GlobalPosition;
+        bullet.Direction = facingDirection;
+
+        var sprite = bullet.GetNode<Sprite2D>("Sprite2D");
+        if (sprite == null)
+            GD.PrintErr("Sprite2D not found on bullet!");
+        else
+            sprite.FlipH = (facingDirection == Vector2.Left);
+
+        GetTree().CurrentScene.AddChild(bullet);
     }
 
 
