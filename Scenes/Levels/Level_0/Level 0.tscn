@@ -89,9 +89,6 @@ script = ExtResource("2_1ltob")
 texture = ExtResource("3_hd128")
 centered = false
 
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(-190, 164)
-
 [node name="Map" type="Node" parent="."]
 
 [node name="Ground" type="TileMap" parent="Map"]
@@ -112,3 +109,5 @@ scale = Vector2(1.5, 1.5)
 collision_layer = 2
 collision_mask = 2
 speed = 250.0
+
+[node name="Marker2D2" type="Marker2D" parent="."]

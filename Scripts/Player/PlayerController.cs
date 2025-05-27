@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Data.Common;
 using System.Diagnostics;
 
 public partial class PlayerController : CharacterBody2D
@@ -8,30 +9,33 @@ public partial class PlayerController : CharacterBody2D
     public const float JumpVelocityY = -350.0f;
     public const float JumpVelocityX = 100f;
     public const float DashSpeed = 400.0f;
-    public const float WallSlideFriction = 5f; 
+    public const float WallSlideFriction = 5f;
     Vector2 dashDirection = Vector2.Zero;
     Vector2 direction = Vector2.Zero;
     private float friction = .1f;
     private float acceleration = 5f;
     private bool isDashing = false;
     private float dashTimer = 0.05f;
-    private const float DashDuration = 0.1f; 
-    private const float DashCooldown = 1.0f; 
+    private const float DashDuration = 0.1f;
+    private const float DashCooldown = 1.0f;
     private float dashCooldownTimer = 0f;
     private float Stamina = 100.0f;
     private float alphaValue = 0f;
     private float deltaValue = 0f;
     private float gravityController = 1f;
+    [Export] private int maxHealth = 3;
+    private int currentHealth;
     private TextureProgressBar textureProgressBar;
     private AnimatedSprite2D sprite;
-    private bool wasOnFloor = false; 
+    private HBoxContainer heartsContainter;
+    [Export] PackedScene heartGUI;
+    private bool wasOnFloor = false;
     private bool isWallSliding = false;
     private bool isRunning = false;
     private bool isFacingRight = true;
     private bool isGliding = false;
     private bool canGlide = false;
     Health health;
-    [Export]
     public PackedScene BulletScene; // Drag your bullet.tscn here in the editor
 
     private Node2D muzzle;
@@ -44,6 +48,10 @@ public partial class PlayerController : CharacterBody2D
         textureProgressBar.Value = 100;
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         muzzle = GetNode<Node2D>("Muzzle");
+        heartsContainter = GetNode<CanvasLayer>("CanvasLayer").GetNode<HBoxContainer>("HeartsContainer");
+        currentHealth = maxHealth;
+        updateHeartUI();
+        SetCurrentHealth(4);
     }
     public override void _Process(double delta)
     {
@@ -57,13 +65,18 @@ public partial class PlayerController : CharacterBody2D
         // Shoot when the shoot button is pressed
         if (Input.IsActionJustPressed("shoot"))
             Shoot();
+
+        //Stamina Process Code
+        StaminaRecovery();
+        //Hide Stamina if no activity
+        if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
     }
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
         bool isOnFloor = IsOnFloor();
         deltaValue = (float)delta;
-        
+
         if (!isOnFloor)
         {
             //Handles Gravity? (it should be handeled directly by the engine)
@@ -71,7 +84,7 @@ public partial class PlayerController : CharacterBody2D
         }
 
         //Get the input from the player
-        direction = !isDashing? Input.GetVector("left", "right", "up", "down"): dashDirection;
+        direction = !isDashing ? Input.GetVector("left", "right", "up", "down") : dashDirection;
         //Handle Mouvement: Jumping, Dashing, Wall Jumping
 
         //Jump and Wall Jump
@@ -83,17 +96,17 @@ public partial class PlayerController : CharacterBody2D
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity.X = !isDashing?HorizontalMovement(velocity, direction, Speed): dashDirection.X * 600f;
+        velocity.X = !isDashing ? HorizontalMovement(velocity, direction, Speed) : dashDirection.X * 600f;
         //Vertical Movement
         velocity.Y = VerticalMovement(velocity);
-        
-        velocity.Y = isWallSliding? VerticalMovement(velocity): velocity.Y;
+
+        velocity.Y = isWallSliding ? VerticalMovement(velocity) : velocity.Y;
 
 
         //Dash Timer
-        if (isOnFloor && !wasOnFloor) 
+        if (isOnFloor && !wasOnFloor)
         {
-            dashCooldownTimer = 0f; 
+            dashCooldownTimer = 0f;
         }
 
         if (dashCooldownTimer > 0)
@@ -125,9 +138,10 @@ public partial class PlayerController : CharacterBody2D
         wasOnFloor = isOnFloor; // Update the floor status
     }
 
-    private Vector2 HandleJump(Vector2 velocity){
+    private Vector2 HandleJump(Vector2 velocity)
+    {
         //Jumping and wall jumping mechanics
-        bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding() ;
+        bool isOnWall = GetNode<RayCast2D>("RayCast2DLeft").IsColliding() || GetNode<RayCast2D>("RayCast2DRight").IsColliding();
         if (Input.IsActionJustPressed("Jump"))
         {
             if (IsOnFloor())
@@ -153,11 +167,14 @@ public partial class PlayerController : CharacterBody2D
 
     private void HandleGlide(Vector2 velocity)
     {
-        if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide)
+        if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && Stamina > 0f)
         {
             //Gliding when it's not on floor
+            Stamina -= 0.5f;
+            textureProgressBar.Value = Stamina;
+            StaminaShow();
             isGliding = true;
-            if (velocity.Y >0)
+            if (velocity.Y > 0)
             {
                 gravityController = 0.08f;
             }
@@ -199,79 +216,85 @@ public partial class PlayerController : CharacterBody2D
             //Stamina is greater than 0, the player will run
             if (Stamina > 0)
             {
-                Stamina -= 0.1f;
+                Stamina -= 0.5f;
                 textureProgressBar.Value = Stamina;
             }
             StaminaShow();
-        }
-        else
-        {
-            if (Stamina < 100f)
-            {
-                //Stamina Recovery
-                Stamina += 0.1f;
-                textureProgressBar.Value = Stamina;
-                StaminaShow();
-            }
-            else
-            {
-                StaminaHide();
-            }
         }
         Math.Clamp(Stamina, 0f, 100f);
         return velocity.X;
     }
 
-    private float VerticalMovement(Vector2 velocity){
+    private void StaminaRecovery()
+    {
+        if (Stamina < 100f && !isRunning && !isGliding)
+        {
+            //Recover Stamina
+            Stamina += 0.5f;
+            textureProgressBar.Value = Stamina;
+            StaminaShow();
+        }
+    }
+
+    private float VerticalMovement(Vector2 velocity)
+    {
         //Check if player is on a wall
-        isWallSliding = (GetNode<RayCast2D>("RayCast2DLeft").IsColliding() && Input.IsActionPressed("left") 
-                        || GetNode<RayCast2D>("RayCast2DRight").IsColliding() && Input.IsActionPressed("right"))&&!IsOnFloor();
-        
-        if(isWallSliding){
-            velocity.Y+= WallSlideFriction;
-            velocity.Y = Mathf.Min(velocity.Y,WallSlideFriction);
+        isWallSliding = (GetNode<RayCast2D>("RayCast2DLeft").IsColliding() && Input.IsActionPressed("left")
+                        || GetNode<RayCast2D>("RayCast2DRight").IsColliding() && Input.IsActionPressed("right")) && !IsOnFloor();
+
+        if (isWallSliding)
+        {
+            velocity.Y += WallSlideFriction;
+            velocity.Y = Mathf.Min(velocity.Y, WallSlideFriction);
         }
         return velocity.Y;
     }
 
-    private Vector2 HandleDashState( Vector2 LastRecordedDirection, double delta = 0.0){
+    private Vector2 HandleDashState(Vector2 LastRecordedDirection, double delta = 0.0)
+    {
         //Handles the dash state of the player
 
         //If the player just pressed the dash key and the cooldown is over and the player is not already dashing
         if (Input.IsActionJustPressed("dash") && dashCooldownTimer <= 0 && !isDashing)
         {
             //User Just Pressed Dash Key
-            isDashing = true; 
+            isDashing = true;
             dashDirection = LastRecordedDirection;
             dashTimer = DashDuration;
             dashCooldownTimer = DashCooldown;
         }
 
-        if(isDashing){
+        if (isDashing)
+        {
             dashTimer -= (float)delta;
-            if(dashTimer <= 0){
+            if (dashTimer <= 0)
+            {
                 isDashing = false;
             }
         }
         return dashDirection;
     }
 
-    private void StaminaHide(){
-        if(alphaValue >0f){
-            alphaValue = Math.Clamp(alphaValue-deltaValue,0f,0.5f);
+    private void StaminaHide()
+    {
+        if (alphaValue > 0f)
+        {
+            alphaValue = Math.Clamp(alphaValue - deltaValue, 0f, 0.5f);
         }
-        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G,textureProgressBar.TintUnder.B, alphaValue);
-        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G,textureProgressBar.TintOver.B, alphaValue);
+        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G, textureProgressBar.TintUnder.B, alphaValue);
+        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G, textureProgressBar.TintOver.B, alphaValue);
         textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
     }
 
-    private void StaminaShow(){
-        if(alphaValue < 0.5f){
+    private void StaminaShow()
+    {
+        if (alphaValue < 0.5f)
+        {
             //Gradually Increase the opacity of the stamina bar
-            alphaValue = Math.Clamp(alphaValue+deltaValue,0f,0.5f);
+            alphaValue = Math.Clamp(alphaValue + deltaValue, 0f, 0.5f);
         }
-        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G,textureProgressBar.TintUnder.B, alphaValue);
-        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G,textureProgressBar.TintOver.B, alphaValue);
+        textureProgressBar.TintUnder = new Color(textureProgressBar.TintUnder.R, textureProgressBar.TintUnder.G, textureProgressBar.TintUnder.B, alphaValue);
+        textureProgressBar.TintOver = new Color(textureProgressBar.TintOver.R, textureProgressBar.TintOver.G, textureProgressBar.TintOver.B, alphaValue);
         textureProgressBar.TintProgress = new Color(textureProgressBar.TintProgress.R, textureProgressBar.TintProgress.G, textureProgressBar.TintProgress.B, alphaValue);
     }
 
@@ -317,8 +340,9 @@ public partial class PlayerController : CharacterBody2D
         return;
     }
 
-    public void DebugPlayer(){
-        
+    public void DebugPlayer()
+    {
+
     }
 
     private void Shoot()
@@ -341,5 +365,31 @@ public partial class PlayerController : CharacterBody2D
         GetTree().CurrentScene.AddChild(bullet);
     }
 
+    //Health System
+    public int GetHealth()
+    {
+        return currentHealth;
+    }
+
+    public void SetCurrentHealth(int newHealth)
+    {
+        currentHealth = Math.Clamp(newHealth, 0, maxHealth);
+        updateHeartUI();
+    }
+
+    private void updateHeartUI()
+    {
+        //First we have to remove all Hearts from the container
+        foreach (Node heartGUI in heartsContainter.GetChildren())
+        {
+            heartGUI.Free();
+        }
+        //Then add hearts depending in the current player health
+        for (int i = 0; i < currentHealth; i++)
+        {
+            heartsContainter.AddChild(heartGUI.Instantiate());
+        }
+          
+    }
 
 }

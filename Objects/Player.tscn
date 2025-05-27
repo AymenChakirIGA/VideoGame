@@ -1,11 +1,13 @@
-[gd_scene load_steps=29 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=32 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
-[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="2_mbj7k"]
 [ext_resource type="Texture2D" uid="uid://c8vxg32m5amr" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
 [ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_ddygy"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
 [ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
+[ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="9_jru3o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
 size = Vector2(12, 21)
@@ -183,10 +185,16 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Resource" id="Resource_k0uux"]
+script = ExtResource("4_ddygy")
+duration = 1.0
+transition = 0
+ease = 2
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
-BulletScene = ExtResource("2_mbj7k")
+heartGUI = ExtResource("9_jru3o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
@@ -200,8 +208,13 @@ frame_progress = 0.715618
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)
+limit_top = -160
 limit_bottom = 164
 position_smoothing_enabled = true
+
+[node name="PhantomCamera2D" type="Node2D" parent="Camera2D"]
+script = ExtResource("3_jucqr")
+tween_resource = SubResource("Resource_k0uux")
 
 [node name="RayCast2DLeft" type="RayCast2D" parent="."]
 rotation = 1.5708
@@ -238,3 +251,15 @@ tint_progress = Color(6.73831e-07, 0.867209, 0.564861, 1)
 
 [node name="Muzzle" type="Node2D" parent="."]
 position = Vector2(20, -4)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+offset = Vector2(100, 0)
+transform = Transform2D(1, 0, 0, 1, 100, 0)
+
+[node name="HeartsContainer" type="HBoxContainer" parent="CanvasLayer"]
+offset_left = -56.0
+offset_top = 11.0
+offset_right = 78.0
+offset_bottom = 81.0
+scale = Vector2(0.5, 0.5)
+theme_override_constants/separation = 40
