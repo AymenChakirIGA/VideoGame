@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://jtulfpymglq0"]
+
+[ext_resource type="Script" path="res://Bullet.cs" id="1_dpfc1"]
+[ext_resource type="Texture2D" uid="uid://cs74rl8ipcwll" path="res://laserRed01.png" id="2_ia3oe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l2o7o"]
+size = Vector2(50, 3)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("1_dpfc1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+texture = ExtResource("2_ia3oe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0.5)
+shape = SubResource("RectangleShape2D_l2o7o")

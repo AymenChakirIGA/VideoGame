@@ -1,13 +1,13 @@
 [gd_scene load_steps=32 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
+[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="2_sa4gb"]
 [ext_resource type="Texture2D" uid="uid://c8vxg32m5amr" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
 [ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_ddygy"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
 [ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
-[ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="9_jru3o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
 size = Vector2(12, 21)
@@ -194,7 +194,7 @@ ease = 2
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
-heartGUI = ExtResource("9_jru3o")
+BulletScene = ExtResource("2_sa4gb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)

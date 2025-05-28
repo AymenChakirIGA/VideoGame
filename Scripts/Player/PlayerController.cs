@@ -36,6 +36,7 @@ public partial class PlayerController : CharacterBody2D
     private bool isGliding = false;
     private bool canGlide = false;
     Health health;
+    [Export]
     public PackedScene BulletScene; // Drag your bullet.tscn here in the editor
 
     private Node2D muzzle;
