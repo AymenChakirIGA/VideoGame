@@ -24,10 +24,14 @@ public partial class PlayerController : CharacterBody2D
     private float deltaValue = 0f;
     private float gravityController = 1f;
     [Export] private int maxHealth = 3;
+    private int blinkCounter = 0;
     private int currentHealth;
     private TextureProgressBar textureProgressBar;
     private AnimatedSprite2D sprite;
     private HBoxContainer heartsContainter;
+    private Timer knockedBackTimer;
+    private Timer invincibleTimer;
+    private Timer blinkTimer;
     [Export] PackedScene heartGUI;
     private bool wasOnFloor = false;
     private bool isWallSliding = false;
@@ -35,6 +39,9 @@ public partial class PlayerController : CharacterBody2D
     private bool isFacingRight = true;
     private bool isGliding = false;
     private bool canGlide = false;
+    private bool isKnockedBack = false;
+    private bool isInvincible = false;
+
     Health health;
     [Export]
     public PackedScene BulletScene; // Drag your bullet.tscn here in the editor
@@ -50,6 +57,9 @@ public partial class PlayerController : CharacterBody2D
         sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         muzzle = GetNode<Node2D>("Muzzle");
         heartsContainter = GetNode<CanvasLayer>("CanvasLayer").GetNode<HBoxContainer>("HeartsContainer");
+        knockedBackTimer = GetNode<Timer>("KnockedBackTimer");
+        invincibleTimer = GetNode<Timer>("InvincibleTimer");
+        blinkTimer = GetNode<Timer>("BlinkTimer");
         currentHealth = maxHealth;
         updateHeartUI();
         SetCurrentHealth(4);
@@ -71,6 +81,7 @@ public partial class PlayerController : CharacterBody2D
         StaminaRecovery();
         //Hide Stamina if no activity
         if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
+
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -97,7 +108,7 @@ public partial class PlayerController : CharacterBody2D
         dashDirection = HandleDashState(direction, delta);
 
         //Horizontal Movement
-        velocity.X = !isDashing ? HorizontalMovement(velocity, direction, Speed) : dashDirection.X * 600f;
+        velocity.X = !isKnockedBack ? (!isDashing ? HorizontalMovement(velocity, direction, Speed) : dashDirection.X * 600f) : velocity.X;
         //Vertical Movement
         velocity.Y = VerticalMovement(velocity);
 
@@ -390,7 +401,51 @@ public partial class PlayerController : CharacterBody2D
         {
             heartsContainter.AddChild(heartGUI.Instantiate());
         }
-          
+
+    }
+
+    //Take Damage from an enemie
+    public void TakeDamage(int heartDamage)
+    {
+        if (isInvincible) return;
+        blinkTimer.Start();
+        knockedBackTimer.Start(); //Start the knocked back timer
+        invincibleTimer.Start(); //Start the invincible timer
+        Vector2 velocity = Velocity;
+        isKnockedBack = true;
+        isInvincible = true; 
+        velocity.X = 130f * (isFacingRight ? -1 : 1);
+        velocity.Y = -100f;
+        Velocity = velocity;
+    }
+
+    //Signals
+    private void OnKnockedBackTimerTimeout()
+    {
+        isKnockedBack = false;
+
+    }
+
+    private void OnInvincibleTimeout()
+    {
+        isInvincible = false;
+        sprite.Visible = true; // in case counter ends with a non mod 2
+        blinkCounter = 0;
+        Debug.Print("Beuzi");
+    }
+
+    //Custom Animation
+    private void OnBlinkTimeout()
+    {
+        //blink one out of two times
+        if (blinkCounter % 2 == 0)
+            sprite.Visible = false;
+        else
+            sprite.Visible = true;
+
+        blinkCounter++;
+        if (isInvincible) blinkTimer.Start();
+        else sprite.Visible = true;
     }
 
 }

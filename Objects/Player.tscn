@@ -1,7 +1,7 @@
 [gd_scene load_steps=32 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
-[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="2_sa4gb"]
+[ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="2_30xyy"]
 [ext_resource type="Texture2D" uid="uid://c8vxg32m5amr" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
 [ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
 [ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
@@ -191,10 +191,10 @@ duration = 1.0
 transition = 0
 ease = 2
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
-BulletScene = ExtResource("2_sa4gb")
+heartGUI = ExtResource("2_30xyy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
@@ -263,3 +263,19 @@ offset_right = 78.0
 offset_bottom = 81.0
 scale = Vector2(0.5, 0.5)
 theme_override_constants/separation = 40
+
+[node name="KnockedBackTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="BlinkTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="InvincibleTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="KnockedBackTimer" to="." method="OnKnockedBackTimerTimeout"]
+[connection signal="timeout" from="BlinkTimer" to="." method="OnBlinkTimeout"]
+[connection signal="timeout" from="InvincibleTimer" to="." method="OnInvincibleTimeout"]

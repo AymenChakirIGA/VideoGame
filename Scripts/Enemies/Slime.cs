@@ -10,7 +10,7 @@ public partial class Slime : CharacterBody2D
 	[Export] public float leftEdge = 5f;
 	[Export] public float rightEdge = 5f;
 	[Export] public float speed = 1f;
-	private enum States {Idle,Patrolling};
+	private enum States { Idle, Patrolling };
 	private States currentState = States.Patrolling;
 	private bool isFacingRight = true;
 	private Vector2 initialPosition;
@@ -21,25 +21,26 @@ public partial class Slime : CharacterBody2D
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		initialPosition = this.Position;
-		
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		animatedSprite.Play("Idle", customSpeed:0.5f);
+		animatedSprite.Play("Idle", customSpeed: 0.5f);
 
 		//Enemy Behaviors Depending on States
-		
-		
+
+
 	}
 
-    public override void _PhysicsProcess(double delta)
-    {
+	public override void _PhysicsProcess(double delta)
+	{
 		Vector2 velocity = Velocity;
 
 		//Gravity
-		if(!this.IsOnFloor()){
+		if (!this.IsOnFloor())
+		{
 			velocity += GetGravity() * (float)delta;
 		}
 
@@ -47,21 +48,27 @@ public partial class Slime : CharacterBody2D
 		if (currentState is States.Patrolling)
 		{
 			//Going Right
-			if(isFacingRight){
-				if(this.Position.X <= initialPosition.X + rightEdge){
+			if (isFacingRight)
+			{
+				if (this.Position.X <= initialPosition.X + rightEdge)
+				{
 					velocity.X = speed * (float)delta;
 				}
-				else{
+				else
+				{
 					isFacingRight = !isFacingRight;
 					this.Scale = new Vector2(-this.Scale.X, this.Scale.Y);
 				}
 			}
 
-			else{
-				if(this.Position.X >= initialPosition.X - leftEdge){
+			else
+			{
+				if (this.Position.X >= initialPosition.X - leftEdge)
+				{
 					velocity.X = -speed * (float)delta;
 				}
-				else{
+				else
+				{
 					isFacingRight = !isFacingRight;
 					this.Scale = new Vector2(-this.Scale.X, this.Scale.Y);
 				}
@@ -69,10 +76,19 @@ public partial class Slime : CharacterBody2D
 
 		}
 
-        base._PhysicsProcess(delta);
+		base._PhysicsProcess(delta);
 		Velocity = velocity;
 		MoveAndSlide();
-    }
+	}
+
+	public void OnAreaBodyEntered(Node2D body)
+	{
+		if (body.IsInGroup("Player"))
+		{
+			Debug.Print("True");
+			(body as PlayerController)?.TakeDamage(1);
+		}
+	}
 
 
 }
