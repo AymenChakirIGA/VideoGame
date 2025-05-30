@@ -1,67 +1,193 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqhq06254l2jw"]
+[gd_scene load_steps=13 format=3 uid="uid://dqhq06254l2jw"]
 
-[sub_resource type="SystemFont" id="SystemFont_yn4nw"]
-font_names = PackedStringArray("Agency FB")
-font_weight = 999
-font_stretch = 175
+[ext_resource type="Texture2D" uid="uid://dpu0ypgwr4fyq" path="res://Assets/Skull_W.png" id="1_75c1h"]
+[ext_resource type="FontFile" uid="uid://ck320q58bkj52" path="res://Assets/Fonts/Poppins/Poppins-Black.ttf" id="1_f2jb1"]
+[ext_resource type="FontFile" uid="uid://ceu7m57myi0ft" path="res://Assets/Fonts/Poppins/pLight.ttf" id="2_wook0"]
+[ext_resource type="FontFile" uid="uid://j38sfb4w0xc6" path="res://Assets/Fonts/Poppins/pMedium.ttf" id="3_34klk"]
+[ext_resource type="Script" path="res://Scripts/UI/Retry.cs" id="4_sbyor"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75xgh"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b64aa"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3sff1"]
 bg_color = Color(1, 1, 1, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_size = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3sff1"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.212305, 0.212305, 0.212305, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="Animation" id="Animation_chfcu"]
+resource_name = "Hover"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/hover:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.433333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0.800491, 0.800491, 0.800491, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nph86"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/hover:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:theme_override_styles/normal:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e5y0l"]
+resource_name = "Normal"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/normal:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.433333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.219501, 0.219501, 0.219501, 1), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qukar"]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/normal:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a4sbd"]
+_data = {
+"Hover": SubResource("Animation_chfcu"),
+"Idle": SubResource("Animation_qukar"),
+"Normal": SubResource("Animation_e5y0l"),
+"RESET": SubResource("Animation_nph86")
+}
 
 [node name="Gameover" type="CanvasLayer"]
 
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
 [node name="Label" type="Label" parent="."]
+texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -43.5
-offset_top = -11.5
-offset_right = 43.5
-offset_bottom = 11.5
+offset_left = -72.0
+offset_top = -43.0
+offset_right = 73.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("1_f2jb1")
+theme_override_font_sizes/font_size = 20
 text = "Game Over"
 horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Button" type="Button" parent="."]
+[node name="Label2" type="Label" parent="."]
+texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -43.0
-offset_top = 18.0
-offset_right = 44.0
-offset_bottom = 49.0
+offset_left = -72.0
+offset_top = -16.0
+offset_right = 73.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_wook0")
+theme_override_font_sizes/font_size = 5
+text = "Don’t be upset, take your umbrella and fight again."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="."]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = 1.0
+offset_right = 174.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = SubResource("SystemFont_yn4nw")
-theme_override_styles/hover = SubResource("StyleBoxFlat_75xgh")
+theme_override_fonts/font = ExtResource("3_34klk")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/hover = SubResource("StyleBoxFlat_b64aa")
 theme_override_styles/normal = SubResource("StyleBoxFlat_3sff1")
 text = "Retry"
+script = ExtResource("4_sbyor")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Button"]
+libraries = {
+"": SubResource("AnimationLibrary_a4sbd")
+}
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -91.0
+offset_right = 24.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_75c1h")
+expand_mode = 1
+
+[connection signal="mouse_entered" from="Button" to="Button" method="onHover"]
+[connection signal="mouse_exited" from="Button" to="Button" method="onNormal"]

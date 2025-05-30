@@ -62,6 +62,8 @@ BulletScene = ExtResource("2_b060m")
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scale = Vector2(1.2, 1.2)
+transform = Transform2D(1.2, 0, 0, 1.2, 0, 0)
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 position = Vector2(-576, -160)
