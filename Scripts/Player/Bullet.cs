@@ -9,6 +9,7 @@ public partial class Bullet : Area2D
     
     public override void _Ready()
     {
+        AddToGroup("bullets");
     }
     
     public override void _PhysicsProcess(double delta)

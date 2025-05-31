@@ -16,6 +16,11 @@ public partial class Retry : Button
 	{
 	}
 
+	public override void _Pressed()
+	{
+		GetTree().ChangeSceneToFile("res://Scenes/levels/level_0/level_0.tscn");
+	}
+
 	private void onHover()
 	{
 		animationPlayer.Play("Hover");

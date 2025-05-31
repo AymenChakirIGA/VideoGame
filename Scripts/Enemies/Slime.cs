@@ -15,6 +15,7 @@ public partial class Slime : CharacterBody2D
 	private bool isFacingRight = true;
 	private Vector2 initialPosition;
 
+	public int Health = 1; // Or whatever health you want
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -83,12 +84,31 @@ public partial class Slime : CharacterBody2D
 
 	public void OnAreaBodyEntered(Node2D body)
 	{
+		
 		if (body.IsInGroup("Player"))
 		{
-			Debug.Print("True");
 			(body as PlayerController)?.TakeDamage(1);
 		}
+		
 	}
 
+	public void OnHitboxBodyEntered(Area2D area)
+	{
+	    if (area.IsInGroup("bullets"))
+	    {
+	        TakeDamage(1);
+	        area.QueueFree();
+	    }
+	}
 
+	public void TakeDamage(int amount)
+	{
+	    Health -= amount;
+	    GD.Print($"Slime took {amount} damage! Health now: {Health}");
+	    if (Health <= 0)
+	    {
+	        GD.Print("Slime defeated!");
+	        QueueFree(); 
+	    }
+	}
 }

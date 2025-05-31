@@ -387,30 +387,40 @@ public partial class PlayerController : CharacterBody2D
     {
         currentHealth = Math.Clamp(newHealth, 0, maxHealth);
         updateHeartUI();
+        if (currentHealth <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        GD.Print("Game Over!");
+        GetTree().ChangeSceneToFile("res://Objects/UI_Components/gameover.tscn");
     }
 
     private void updateHeartUI()
     {
-        //First we have to remove all Hearts from the container
+        // Remove all hearts
         foreach (Node heartGUI in heartsContainter.GetChildren())
         {
             heartGUI.Free();
         }
-        //Then add hearts depending in the current player health
+        // Add hearts for current health
         for (int i = 0; i < currentHealth; i++)
         {
             heartsContainter.AddChild(heartGUI.Instantiate());
         }
-
     }
 
     //Take Damage from an enemie
     public void TakeDamage(int heartDamage)
     {
         if (isInvincible) return;
+        SetCurrentHealth(currentHealth - heartDamage); 
         blinkTimer.Start();
-        knockedBackTimer.Start(); //Start the knocked back timer
-        invincibleTimer.Start(); //Start the invincible timer
+        knockedBackTimer.Start();
+        invincibleTimer.Start();
         Vector2 velocity = Velocity;
         isKnockedBack = true;
         isInvincible = true; 

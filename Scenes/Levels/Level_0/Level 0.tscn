@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=10 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
 [ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_hk03o"]
 [ext_resource type="Script" path="res://Scenes/Levels/Level_0/CloudLayout.cs" id="2_1ltob"]
-[ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="2_b060m"]
 [ext_resource type="Texture2D" uid="uid://dnv4ciwl6f4kl" path="res://Assets/Levels/Level 0/Clouds/2.png" id="2_lvv70"]
 [ext_resource type="Texture2D" uid="uid://c7mq5mjitkvxy" path="res://Assets/Levels/Level 0/Clouds/4.png" id="3_hd128"]
 [ext_resource type="Texture2D" uid="uid://bky8x80vakako" path="res://Assets/Levels/Level 0/Tileset/forest v1.png" id="6_onomb"]
@@ -57,7 +56,6 @@ sources/0 = SubResource("TileSetAtlasSource_g2ckj")
 [node name="Player" parent="." instance=ExtResource("1_a7hkd")]
 position = Vector2(-55, 108)
 scale = Vector2(2, 2)
-BulletScene = ExtResource("2_b060m")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 

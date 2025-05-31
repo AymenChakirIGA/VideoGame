@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://du2f7dtt6qmpv"]
+[gd_scene load_steps=9 format=3 uid="uid://du2f7dtt6qmpv"]
 
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
 [ext_resource type="Script" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
@@ -31,6 +31,9 @@ size = Vector2(23, 13)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bfjbn"]
 size = Vector2(20, 11)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ymquf"]
+size = Vector2(24, 62)
+
 [node name="Slime" type="CharacterBody2D"]
 script = ExtResource("1_ucpgg")
 
@@ -48,4 +51,12 @@ shape = SubResource("RectangleShape2D_v6mfy")
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_bfjbn")
 
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_ymquf")
+debug_color = Color(1, 0.000281276, 0.0838801, 0.42)
+
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
+[connection signal="area_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
