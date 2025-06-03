@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 public partial class PlayerController : CharacterBody2D
 {
@@ -32,6 +33,10 @@ public partial class PlayerController : CharacterBody2D
     private Timer knockedBackTimer;
     private Timer invincibleTimer;
     private Timer blinkTimer;
+    private Timer BookShootTimer;
+    private AnimatedSprite2D bookSprite;
+    private AnimationPlayer bookAnimationPlayer;
+    [Export] public PackedScene GameOverScene;
     [Export] PackedScene heartGUI;
     private bool wasOnFloor = false;
     private bool isWallSliding = false;
@@ -41,6 +46,8 @@ public partial class PlayerController : CharacterBody2D
     private bool canGlide = false;
     private bool isKnockedBack = false;
     private bool isInvincible = false;
+    private bool isShooting = false;
+    
 
     Health health;
     [Export]
@@ -60,6 +67,9 @@ public partial class PlayerController : CharacterBody2D
         knockedBackTimer = GetNode<Timer>("KnockedBackTimer");
         invincibleTimer = GetNode<Timer>("InvincibleTimer");
         blinkTimer = GetNode<Timer>("BlinkTimer");
+        bookSprite = GetNode<AnimatedSprite2D>("Book");
+        bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
+        BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
         currentHealth = maxHealth;
         updateHeartUI();
         SetCurrentHealth(4);
@@ -81,6 +91,7 @@ public partial class PlayerController : CharacterBody2D
         StaminaRecovery();
         //Hide Stamina if no activity
         if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
+        BookAnimation();
 
     }
     public override void _PhysicsProcess(double delta)
@@ -102,7 +113,7 @@ public partial class PlayerController : CharacterBody2D
         //Jump and Wall Jump
         velocity = HandleJump(velocity);
 
-        HandleGlide(velocity);
+        velocity.Y = HandleGlide(velocity);
 
         //Dash
         dashDirection = HandleDashState(direction, delta);
@@ -177,7 +188,7 @@ public partial class PlayerController : CharacterBody2D
         return velocity;
     }
 
-    private void HandleGlide(Vector2 velocity)
+    private float HandleGlide(Vector2 velocity)
     {
         if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && Stamina > 0f)
         {
@@ -186,8 +197,10 @@ public partial class PlayerController : CharacterBody2D
             textureProgressBar.Value = Stamina;
             StaminaShow();
             isGliding = true;
+            Debug.Print(velocity.Y.ToString());
             if (velocity.Y > 0)
             {
+                velocity.Y = Math.Clamp(velocity.Y, 0, 50f);
                 gravityController = 0.08f;
             }
         }
@@ -203,6 +216,7 @@ public partial class PlayerController : CharacterBody2D
             // Handle the case when the charachter just jumped
             canGlide = Input.IsActionJustReleased("Jump");
         }
+        return velocity.Y;
     }
 
 
@@ -357,6 +371,36 @@ public partial class PlayerController : CharacterBody2D
 
     }
 
+    private void BookAnimation()
+    {
+        //Handle Book Movement
+        if (BookShootTimer.IsStopped())
+        {
+            bookSprite.Play("Idle");
+            if (isFacingRight)
+            {
+                bookAnimationPlayer.Play("Idle");
+            }
+            else
+            {
+                bookAnimationPlayer.Play("Idle_Reverse");
+            }
+        }
+        else
+        {
+            bookSprite.Play("Open");
+            if (isFacingRight)
+            {
+                bookAnimationPlayer.Play("Shoot");
+            }
+            else
+            {
+                bookAnimationPlayer.Play("Shoot_Reverse");
+            }
+
+        }
+    }
+
     private void Shoot()
     {
         if (BulletScene == null || muzzle == null)
@@ -367,6 +411,8 @@ public partial class PlayerController : CharacterBody2D
         var bullet = (Bullet)BulletScene.Instantiate();
         bullet.Position = muzzle.GlobalPosition;
         bullet.Direction = facingDirection;
+        isShooting = true;
+        BookShootTimer.Start();
 
         var sprite = bullet.GetNode<Sprite2D>("Sprite2D");
         if (sprite == null)
@@ -393,18 +439,12 @@ public partial class PlayerController : CharacterBody2D
         }
     }
 
-    private void GameOver()
-    {
-        GD.Print("Game Over!");
-        GetTree().ChangeSceneToFile("res://Objects/UI_Components/gameover.tscn");
-    }
-
     private void updateHeartUI()
     {
         // Remove all hearts
         foreach (Node heartGUI in heartsContainter.GetChildren())
         {
-            heartGUI.Free();
+            heartGUI.QueueFree();
         }
         // Add hearts for current health
         for (int i = 0; i < currentHealth; i++)
@@ -414,7 +454,7 @@ public partial class PlayerController : CharacterBody2D
     }
 
     //Take Damage from an enemie
-    public void TakeDamage(int heartDamage)
+    public async Task TakeDamage(int heartDamage)
     {
         if (isInvincible) return;
         SetCurrentHealth(currentHealth - heartDamage); 
@@ -423,10 +463,27 @@ public partial class PlayerController : CharacterBody2D
         invincibleTimer.Start();
         Vector2 velocity = Velocity;
         isKnockedBack = true;
-        isInvincible = true; 
+        isInvincible = true;
         velocity.X = 130f * (isFacingRight ? -1 : 1);
         velocity.Y = -100f;
         Velocity = velocity;
+
+        //Update hearts counter
+        if (currentHealth - heartDamage <= 0)
+        {
+            //if health is lower than 0 it's game over
+            GameOver();
+        }
+        var animationPlayer = heartsContainter.GetChild(currentHealth-1).GetNode<AnimationPlayer>("AnimationPlayer");
+        animationPlayer.Play("Break");
+        await ToSignal(animationPlayer, "animation_finished");
+        SetCurrentHealth(currentHealth - 1);
+    }
+
+    //GameOver
+    private void GameOver()
+    {
+        AddChild(GameOverScene.Instantiate());
     }
 
     //Signals
@@ -441,7 +498,6 @@ public partial class PlayerController : CharacterBody2D
         isInvincible = false;
         sprite.Visible = true; // in case counter ends with a non mod 2
         blinkCounter = 0;
-        Debug.Print("Beuzi");
     }
 
     //Custom Animation

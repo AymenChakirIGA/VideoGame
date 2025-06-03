@@ -8,7 +8,7 @@ public partial class Retry : Button
 	public override void _Ready()
 	{
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		animationPlayer.Play("Idle");
+		animationPlayer.Play("Init");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://du2f7dtt6qmpv"]
+[gd_scene load_steps=13 format=3 uid="uid://du2f7dtt6qmpv"]
 
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
 [ext_resource type="Script" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
@@ -34,6 +34,61 @@ size = Vector2(20, 11)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ymquf"]
 size = Vector2(24, 62)
 
+[sub_resource type="Animation" id="Animation_0ednd"]
+resource_name = "Damage"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.592448, 2.20537e-06, 4.17233e-07, 1), Color(1, 1, 1, 1), Color(0.592157, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qdclg"]
+resource_name = "Death"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.411765, 0.411765, 0.411765, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_banyi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fj70v"]
+_data = {
+"Damage": SubResource("Animation_0ednd"),
+"Death": SubResource("Animation_qdclg"),
+"RESET": SubResource("Animation_banyi")
+}
+
 [node name="Slime" type="CharacterBody2D"]
 script = ExtResource("1_ucpgg")
 
@@ -57,6 +112,11 @@ shape = SubResource("RectangleShape2D_bfjbn")
 position = Vector2(0, -21)
 shape = SubResource("RectangleShape2D_ymquf")
 debug_color = Color(1, 0.000281276, 0.0838801, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fj70v")
+}
 
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
 [connection signal="area_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]

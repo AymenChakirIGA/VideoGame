@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 public partial class Slime : CharacterBody2D
 {
@@ -14,6 +15,8 @@ public partial class Slime : CharacterBody2D
 	private States currentState = States.Patrolling;
 	private bool isFacingRight = true;
 	private Vector2 initialPosition;
+	private AnimationPlayer animationPlayer;
+	private bool isDeath = false;
 
 	public int Health = 1; // Or whatever health you want
 
@@ -21,6 +24,7 @@ public partial class Slime : CharacterBody2D
 	public override void _Ready()
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		initialPosition = this.Position;
 
 	}
@@ -31,8 +35,6 @@ public partial class Slime : CharacterBody2D
 		animatedSprite.Play("Idle", customSpeed: 0.5f);
 
 		//Enemy Behaviors Depending on States
-
-
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -78,36 +80,39 @@ public partial class Slime : CharacterBody2D
 		}
 
 		base._PhysicsProcess(delta);
-		Velocity = velocity;
+		Velocity = isDeath ? Vector2.Zero : velocity;
 		MoveAndSlide();
 	}
 
 	public void OnAreaBodyEntered(Node2D body)
 	{
 		
-		if (body.IsInGroup("Player"))
+		if (body.IsInGroup("Player") &&!isDeath)
 		{
 			(body as PlayerController)?.TakeDamage(1);
 		}
 		
 	}
 
-	public void OnHitboxBodyEntered(Area2D area)
+	public async void OnHitboxBodyEntered(Area2D area)
 	{
-	    if (area.IsInGroup("bullets"))
-	    {
-	        TakeDamage(1);
-	        area.QueueFree();
-	    }
+		if (area.IsInGroup("bullets"))
+		{
+			await TakeDamage(1);
+			area.QueueFree();
+		}
 	}
 
-	public void TakeDamage(int amount)
+	public async Task TakeDamage(int amount)
 	{
 	    Health -= amount;
 	    GD.Print($"Slime took {amount} damage! Health now: {Health}");
 	    if (Health <= 0)
 	    {
+			isDeath = true; //Prevent the enemy to continue patrolling
 	        GD.Print("Slime defeated!");
+			animationPlayer.Play("Death");
+			await ToSignal(animationPlayer, "animation_finished");
 	        QueueFree(); 
 	    }
 	}
