@@ -469,7 +469,7 @@ public partial class PlayerController : CharacterBody2D
         Velocity = velocity;
 
         //Update hearts counter
-        if (currentHealth - heartDamage <= 0)
+        if (currentHealth <= 0)
         {
             //if health is lower than 0 it's game over
             GameOver();
@@ -477,7 +477,6 @@ public partial class PlayerController : CharacterBody2D
         var animationPlayer = heartsContainter.GetChild(currentHealth-1).GetNode<AnimationPlayer>("AnimationPlayer");
         animationPlayer.Play("Break");
         await ToSignal(animationPlayer, "animation_finished");
-        SetCurrentHealth(currentHealth - 1);
     }
 
     //GameOver
