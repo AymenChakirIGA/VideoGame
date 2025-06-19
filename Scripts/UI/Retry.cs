@@ -18,7 +18,7 @@ public partial class Retry : Button
 
 	public override void _Pressed()
 	{
-		GetTree().ChangeSceneToFile("res://Scenes/levels/level_0/level_0.tscn");
+		GetTree().ReloadCurrentScene();
 	}
 
 	private void onHover()

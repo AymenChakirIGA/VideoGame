@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class PauseMenu : CanvasLayer
 {
@@ -11,6 +12,7 @@ public partial class PauseMenu : CanvasLayer
 		this.Visible = false; // Hide the pause menu initially
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		animationPlayer.Play("Idle");
+		GetTree().Paused = false; // Ensure the game is not paused at the start
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,12 +21,10 @@ public partial class PauseMenu : CanvasLayer
 		if (!isPaused && Input.IsActionJustPressed("Pause"))
 		{
 			Pause();
-			isPaused = true; // Set the pause state to true
 		}
 		else if (isPaused && Input.IsActionJustPressed("Pause"))
 		{
 			Resume();
-			isPaused = false; // Set the pause state to false
 		}
 	}
 
@@ -33,11 +33,24 @@ public partial class PauseMenu : CanvasLayer
 		this.Visible = false; // Hide the pause menu
 		GetTree().Paused = false; // Resume the game
 		animationPlayer.PlayBackwards("Pause");
+		isPaused = false; 
 	}
 	private void Pause()
 	{
 		this.Visible = true; // Show the pause menu
+		isPaused = true; 
 		GetTree().Paused = true; // Pause the game
 		animationPlayer.Play("Pause");
+	}
+
+	private void Restart()
+	{
+		GetTree().ReloadCurrentScene(); // Restart the current scene
+		
+	}
+
+	private void Quit()
+	{
+		GetTree().Quit();
 	}
 }
