@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=12 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
+[ext_resource type="PackedScene" uid="uid://bbkll8h5sfvar" path="res://Objects/UI_Components/pause_menu.tscn" id="1_bcu6k"]
 [ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_hk03o"]
 [ext_resource type="PackedScene" uid="uid://cued7siu7scq" path="res://Objects/UI_Components/HUD.tscn" id="1_rvmcr"]
 [ext_resource type="Script" path="res://Scenes/Levels/Level_0/CloudLayout.cs" id="2_1ltob"]
@@ -53,6 +54,8 @@ physics_layer_0/collision_layer = 3
 sources/0 = SubResource("TileSetAtlasSource_g2ckj")
 
 [node name="Level0" type="Node2D"]
+
+[node name="Pause Menu" parent="." instance=ExtResource("1_bcu6k")]
 
 [node name="CanvasLayer" parent="." instance=ExtResource("1_rvmcr")]
 ActName = "Act I"
