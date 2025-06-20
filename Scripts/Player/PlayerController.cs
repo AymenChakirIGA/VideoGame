@@ -36,6 +36,7 @@ public partial class PlayerController : CharacterBody2D
     private Timer BookShootTimer;
     private AnimatedSprite2D bookSprite;
     private AnimationPlayer bookAnimationPlayer;
+    private Vector2 spawnPosition;
     [Export] public PackedScene GameOverScene;
     [Export] PackedScene heartGUI;
     private bool wasOnFloor = false;
@@ -71,8 +72,16 @@ public partial class PlayerController : CharacterBody2D
         bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
         BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
         currentHealth = maxHealth;
+        spawnPosition = Position;
         updateHeartUI();
         SetCurrentHealth(4);
+
+        //Checkpoint
+        var global = (Global)GetNode("/root/Global");
+        if (global.IsCheckpointExists)
+        {
+            Position = global.CheckpointPosition;
+        }
     }
     public override void _Process(double delta)
     {
@@ -477,6 +486,12 @@ public partial class PlayerController : CharacterBody2D
         var animationPlayer = heartsContainter.GetChild(currentHealth-1).GetNode<AnimationPlayer>("AnimationPlayer");
         animationPlayer.Play("Break");
         await ToSignal(animationPlayer, "animation_finished");
+    }
+
+    //Set Spawn Position ex: when the player Collides with a checkpoint
+    public void SetSpawnPosition(Vector2 newSpawnPosition)
+    {
+        spawnPosition = newSpawnPosition;
     }
 
     //GameOver

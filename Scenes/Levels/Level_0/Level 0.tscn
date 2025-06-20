@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=13 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
 [ext_resource type="PackedScene" uid="uid://bbkll8h5sfvar" path="res://Objects/UI_Components/pause_menu.tscn" id="1_bcu6k"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c7mq5mjitkvxy" path="res://Assets/Levels/Level 0/Clouds/4.png" id="3_hd128"]
 [ext_resource type="Texture2D" uid="uid://bky8x80vakako" path="res://Assets/Levels/Level 0/Tileset/forest v1.png" id="6_onomb"]
 [ext_resource type="PackedScene" uid="uid://du2f7dtt6qmpv" path="res://Objects/Enemies/slime.tscn" id="7_ro4y0"]
+[ext_resource type="PackedScene" uid="uid://bvdulwpcxvosp" path="res://Objects/Others/checkpoint.tscn" id="10_gbidr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2ckj"]
 texture = ExtResource("6_onomb")
@@ -117,5 +118,8 @@ speed = 250.0
 [node name="Player" parent="." instance=ExtResource("1_a7hkd")]
 position = Vector2(-55, 108)
 scale = Vector2(2, 2)
+
+[node name="Checkpoint" parent="." instance=ExtResource("10_gbidr")]
+position = Vector2(232, 77)
 
 [node name="Camera2D" type="Camera2D" parent="."]
