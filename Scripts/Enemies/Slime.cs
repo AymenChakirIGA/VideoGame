@@ -5,36 +5,47 @@ using System.Threading.Tasks;
 
 public partial class Slime : CharacterBody2D
 {
-	//Variables
-	private float gravity = 10f;
+	// Components
 	private AnimatedSprite2D animatedSprite;
+	private AnimationPlayer animationPlayer;
+	private CollisionShape2D collision;
+
+	// Movement
 	[Export] public float leftEdge = 5f;
 	[Export] public float rightEdge = 5f;
 	[Export] public float speed = 1f;
-	private enum States { Idle, Patrolling };
-	private States currentState = States.Patrolling;
 	private bool isFacingRight = true;
 	private Vector2 initialPosition;
-	private AnimationPlayer animationPlayer;
+
+	// State
+	private enum States { Idle, Patrolling, Dying };
+	private States currentState = States.Patrolling;
 	private bool isDeath = false;
 
-	public int Health = 1; // Or whatever health you want
+	// Death Physics
+	private float deathVerticalVelocity = -150f; // Initial pop-up speed
+	private float deathGravity = 500f;           // Pull-down force
 
-	// Called when the node enters the scene tree for the first time.
+	// Health
+	public int Health = 3;
+
 	public override void _Ready()
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		initialPosition = this.Position;
+		collision = GetNode<CollisionShape2D>("CollisionShape2D");
+		initialPosition = Position;
 
+		// Connect animation finished for cleanup
+		animationPlayer.AnimationFinished += OnAnimationFinished;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		animatedSprite.Play("Idle", customSpeed: 0.5f);
-
-		//Enemy Behaviors Depending on States
+		if (!isDeath)
+		{
+			animatedSprite.Play("Idle", customSpeed: 0.5f);
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -78,20 +89,35 @@ public partial class Slime : CharacterBody2D
 			}
 
 		}
+		else if (currentState == States.Dying)
+		{
+			// Play animation once
+			if (!animationPlayer.IsPlaying())
+				animationPlayer.Play("Death");
 
-		base._PhysicsProcess(delta);
+			// Disable collision
+			collision.Disabled = true;
+
+			// Apply vertical "bounce" motion
+			Position += new Vector2(10f * (float)delta, deathVerticalVelocity * (float)delta);
+			deathVerticalVelocity += deathGravity * (float)delta;
+
+			Rotation += (float)delta * 10f; // Rotate slowly while dying
+
+			// Stop velocity
+			velocity = Vector2.Zero;
+		}
+
 		Velocity = isDeath ? Vector2.Zero : velocity;
 		MoveAndSlide();
 	}
 
 	public void OnAreaBodyEntered(Node2D body)
 	{
-		
-		if (body.IsInGroup("Player") &&!isDeath)
+		if (body.IsInGroup("Player") && !isDeath)
 		{
 			(body as PlayerController)?.TakeDamage(1);
 		}
-		
 	}
 
 	public async void OnHitboxBodyEntered(Area2D area)
@@ -105,15 +131,25 @@ public partial class Slime : CharacterBody2D
 
 	public async Task TakeDamage(int amount)
 	{
-	    Health -= amount;
-	    GD.Print($"Slime took {amount} damage! Health now: {Health}");
-	    if (Health <= 0)
-	    {
-			isDeath = true; //Prevent the enemy to continue patrolling
-	        GD.Print("Slime defeated!");
+		Health -= amount;
+		GD.Print($"Slime took {amount} damage! Health now: {Health}");
+
+		animationPlayer.Play("Damage", customSpeed: 2f);
+
+		if (Health <= 0)
+		{
+			isDeath = true;
+			currentState = States.Dying;
+			deathVerticalVelocity = -150f; // Give it the pop-up effect
 			animationPlayer.Play("Death");
-			await ToSignal(animationPlayer, "animation_finished");
-	        QueueFree(); 
-	    }
+		}
+	}
+
+	private void OnAnimationFinished(StringName animName)
+	{
+		if (animName == "Death")
+		{
+			QueueFree(); // Clean up enemy
+		}
 	}
 }
