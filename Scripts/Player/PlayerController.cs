@@ -500,6 +500,12 @@ public partial class PlayerController : CharacterBody2D
         AddChild(GameOverScene.Instantiate());
     }
 
+    //Win / Goal reached
+    public void Win()
+    {
+        
+    }
+
     //Signals
     private void OnKnockedBackTimerTimeout()
     {
