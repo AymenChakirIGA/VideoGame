@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://du2f7dtt6qmpv"]
 
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
-[ext_resource type="Script" uid="uid://dot01cygqo33m" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
+[ext_resource type="Script" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_33v43"]
 atlas = ExtResource("1_ggphh")
@@ -131,9 +131,9 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fj70v"]
 _data = {
-&"Damage": SubResource("Animation_0ednd"),
-&"Death": SubResource("Animation_qdclg"),
-&"RESET": SubResource("Animation_banyi")
+"Damage": SubResource("Animation_0ednd"),
+"Death": SubResource("Animation_qdclg"),
+"RESET": SubResource("Animation_banyi")
 }
 
 [node name="Slime" type="CharacterBody2D"]
@@ -164,7 +164,7 @@ debug_color = Color(1, 0.000281276, 0.0838801, 0.42)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_fj70v")
+"": SubResource("AnimationLibrary_fj70v")
 }
 
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]

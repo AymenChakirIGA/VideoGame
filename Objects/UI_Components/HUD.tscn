@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cued7siu7scq"]
 
-[ext_resource type="Script" uid="uid://bbhpwglcexvaf" path="res://Scripts/UI/Hud.cs" id="1_f8y1k"]
+[ext_resource type="Script" path="res://Scripts/UI/Hud.cs" id="1_f8y1k"]
 [ext_resource type="Texture2D" uid="uid://iyftyt6kcr3w" path="res://Assets/UI/HUD/Triangle.png" id="1_gawjf"]
 [ext_resource type="FontFile" uid="uid://blmcew08ljhhh" path="res://Assets/Fonts/FOT-Chiaro Std B.ttf" id="2_b0qx4"]
 [ext_resource type="FontFile" uid="uid://bpal1rtbq5tvt" path="res://Assets/Fonts/Poppins/Poppins-BlackItalic.ttf" id="2_bfhu2"]

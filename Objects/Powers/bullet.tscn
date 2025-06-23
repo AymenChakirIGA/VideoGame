@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b5hhtc6byb0t5"]
 
-[ext_resource type="Script" uid="uid://b3kyo0je1ty1l" path="res://Scripts/Player/Bullet.cs" id="1_madsi"]
+[ext_resource type="Script" path="res://Scripts/Player/Bullet.cs" id="1_madsi"]
 [ext_resource type="Texture2D" uid="uid://pko4yjkenwfm" path="res://Objects/Powers/Bullet-blue.png" id="2_xpmri"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l2o7o"]

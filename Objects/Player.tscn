@@ -1,12 +1,13 @@
-[gd_scene load_steps=54 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=53 format=3 uid="uid://bf03q4af4885f"]
 
-[ext_resource type="Script" uid="uid://ct7r3qfr10kpt" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="2_30xyy"]
+[ext_resource type="PackedScene" uid="uid://dqhq06254l2jw" path="res://Objects/UI_Components/gameover.tscn" id="2_hndq2"]
 [ext_resource type="Texture2D" uid="uid://j2xrc70tafaf" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
-[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
-[ext_resource type="Script" uid="uid://cyq7xfk6afav3" path="res://Scripts/Player/Health.cs" id="3_oy706"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
+[ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
 [ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="4_cbxwr"]
-[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_ddygy"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_ddygy"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
 [ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
 [ext_resource type="Texture2D" uid="uid://dlm1xosxguil" path="res://Assets/Sprites/Player/book.png" id="11_lsy4k"]
@@ -397,20 +398,18 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cdhlf"]
 _data = {
-&"Idle": SubResource("Animation_nekkg"),
-&"Idle_Reverse": SubResource("Animation_le7dy"),
-&"RESET": SubResource("Animation_mdlhe"),
-&"ReturnToIdle": SubResource("Animation_txxd8"),
-&"Shoot": SubResource("Animation_nrjdi"),
-&"Shoot_Reverse": SubResource("Animation_ekx72")
+"Idle": SubResource("Animation_nekkg"),
+"Idle_Reverse": SubResource("Animation_le7dy"),
+"RESET": SubResource("Animation_mdlhe"),
+"ReturnToIdle": SubResource("Animation_txxd8"),
+"Shoot": SubResource("Animation_nrjdi"),
+"Shoot_Reverse": SubResource("Animation_ekx72")
 }
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_02jmu"]
-size = Vector2(16, 20)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
+GameOverScene = ExtResource("2_hndq2")
 heartGUI = ExtResource("2_30xyy")
 BulletScene = ExtResource("4_cbxwr")
 
@@ -421,8 +420,8 @@ shape = SubResource("RectangleShape2D_tjrg2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ovccg")
-animation = &"Melee_1"
-frame_progress = 0.62369
+animation = &"Jump"
+frame_progress = 0.509396
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)
@@ -447,11 +446,10 @@ position = Vector2(-21, -7)
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_rorim")
 animation = &"Idle"
-frame_progress = 0.648543
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Book"]
 libraries = {
-&"": SubResource("AnimationLibrary_cdhlf")
+"": SubResource("AnimationLibrary_cdhlf")
 }
 
 [node name="ShootAnimationTimer" type="Timer" parent="Book"]
@@ -509,14 +507,6 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[node name="MeleeArea" type="Area2D" parent="."]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeArea"]
-position = Vector2(14, 2)
-shape = SubResource("RectangleShape2D_02jmu")
-
 [connection signal="timeout" from="KnockedBackTimer" to="." method="OnKnockedBackTimerTimeout"]
 [connection signal="timeout" from="BlinkTimer" to="." method="OnBlinkTimeout"]
 [connection signal="timeout" from="InvincibleTimer" to="." method="OnInvincibleTimeout"]
-[connection signal="area_entered" from="MeleeArea" to="." method="_on_melee_area_area_entered"]

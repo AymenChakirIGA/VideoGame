@@ -48,10 +48,7 @@ public partial class PlayerController : CharacterBody2D
     private bool isKnockedBack = false;
     private bool isInvincible = false;
     private bool isShooting = false;
-    private Area2D meleeArea;
-    private Timer meleeTimer;
-    private bool canMelee = true;
-    private bool isMeleeAttacking = false;
+    
 
     Health health;
     [Export]
@@ -85,21 +82,6 @@ public partial class PlayerController : CharacterBody2D
         {
             Position = global.CheckpointPosition;
         }
-
-        meleeArea = GetNode<Area2D>("MeleeArea");
-        meleeArea.BodyEntered += OnMeleeAreaBodyEntered;
-        meleeArea.AreaEntered += OnMeleeAreaAreaEntered;
-        meleeArea.AddToGroup("melee");
-
-        // Add a timer for melee cooldown/duration
-        meleeTimer = new Timer();
-        meleeTimer.OneShot = true;
-        meleeTimer.WaitTime = 0.2f; // Melee active duration
-        AddChild(meleeTimer);
-        meleeTimer.Timeout += OnMeleeTimerTimeout;
-
-        // Connect melee hit signal
-        meleeArea.BodyEntered += OnMeleeAreaBodyEntered;
     }
     public override void _Process(double delta)
     {
@@ -120,11 +102,6 @@ public partial class PlayerController : CharacterBody2D
         if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
         BookAnimation();
 
-        // Melee attack input
-        if (Input.IsActionJustPressed("melee") && canMelee)
-        {
-            MeleeAttack();
-        }
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -455,51 +432,6 @@ public partial class PlayerController : CharacterBody2D
         GetTree().CurrentScene.AddChild(bullet);
     }
 
-    private void MeleeAttack()
-    {
-        foreach (var slime in GetTree().GetNodesInGroup("mobs"))
-        {
-            if (slime is Slime s)
-                s.ResetMeleeHit();
-        }
-
-        canMelee = false;
-        isMeleeAttacking = true;
-        meleeArea.Monitoring = true;
-        meleeArea.Visible = true;
-        meleeTimer.Start();
-        sprite.Play("Melee_3"); 
-    }
-
-    private void OnMeleeTimerTimeout()
-    {
-        meleeArea.Monitoring = false;
-        meleeArea.Visible = false;
-        canMelee = true;
-        isMeleeAttacking = false; 
-    }
-
-    private void OnMeleeAreaBodyEntered(Node body)
-    {
-        GD.Print("Melee hit: " + body.Name);
-        if (body.IsInGroup("mobs"))
-        {
-            if (body.HasMethod("TakeDamage"))
-                body.Call("TakeDamage", 1);
-        }
-    }
-
-    private void OnMeleeAreaAreaEntered(Area2D area)
-    {
-        GD.Print("Melee area hit: " + area.Name);
-        // Check if the area is a hitbox and its parent is a mob
-        if (area.Name == "Hitbox" && area.GetParent() is Node parent && parent.IsInGroup("mobs"))
-        {
-            if (parent.HasMethod("TakeDamage"))
-                parent.Call("TakeDamage", 1);
-        }
-    }
-
     //Health System
     public int GetHealth()
     {
@@ -596,8 +528,4 @@ public partial class PlayerController : CharacterBody2D
         else sprite.Visible = true;
     }
 
-    public bool IsMeleeAttacking()
-    {
-        return isMeleeAttacking;
-    }
 }

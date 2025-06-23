@@ -1,10 +1,10 @@
 [gd_scene load_steps=22 format=3 uid="uid://bbkll8h5sfvar"]
 
-[ext_resource type="Script" uid="uid://bc6u2nkwsu0m5" path="res://Scripts/UI/PauseMenu.cs" id="1_bqwkh"]
+[ext_resource type="Script" path="res://Scripts/UI/PauseMenu.cs" id="1_bqwkh"]
 [ext_resource type="FontFile" uid="uid://ck320q58bkj52" path="res://Assets/Fonts/Poppins/Poppins-Black.ttf" id="1_jdpwv"]
 [ext_resource type="FontFile" uid="uid://du61fk4t0a6xr" path="res://Assets/Fonts/Poppins/Poppins-Light.ttf" id="2_0xtqi"]
-[ext_resource type="Shader" uid="uid://df6160slg7nlq" path="res://shaders/gameover.gdshader" id="2_hhjsj"]
-[ext_resource type="Script" uid="uid://c500kwr28ok7f" path="res://Scripts/UI/PauseButton.cs" id="3_krxob"]
+[ext_resource type="Shader" path="res://shaders/gameover.gdshader" id="2_hhjsj"]
+[ext_resource type="Script" path="res://Scripts/UI/PauseButton.cs" id="3_krxob"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m6b1n"]
 shader = ExtResource("2_hhjsj")
@@ -182,9 +182,9 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fttfk"]
 _data = {
-&"Idle": SubResource("Animation_xvwoe"),
-&"RESET": SubResource("Animation_26ihe"),
-&"hover": SubResource("Animation_6shol")
+"Idle": SubResource("Animation_xvwoe"),
+"RESET": SubResource("Animation_26ihe"),
+"hover": SubResource("Animation_6shol")
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqvjf"]
@@ -346,9 +346,9 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fufhi"]
 _data = {
-&"Idle": SubResource("Animation_th7ro"),
-&"Pause": SubResource("Animation_njehy"),
-&"RESET": SubResource("Animation_gmif4")
+"Idle": SubResource("Animation_th7ro"),
+"Pause": SubResource("Animation_njehy"),
+"RESET": SubResource("Animation_gmif4")
 }
 
 [node name="Pause Menu" type="CanvasLayer"]
