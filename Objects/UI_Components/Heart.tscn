@@ -34,8 +34,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4jkqh"]
 _data = {
-"Break": SubResource("Animation_m2nsy"),
-"RESET": SubResource("Animation_et3uf")
+&"Break": SubResource("Animation_m2nsy"),
+&"RESET": SubResource("Animation_et3uf")
 }
 
 [node name="heartGUI" type="Panel"]

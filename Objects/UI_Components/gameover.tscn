@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://ck320q58bkj52" path="res://Assets/Fonts/Poppins/Poppins-Black.ttf" id="1_f2jb1"]
 [ext_resource type="FontFile" uid="uid://ceu7m57myi0ft" path="res://Assets/Fonts/Poppins/pLight.ttf" id="2_wook0"]
 [ext_resource type="FontFile" uid="uid://j38sfb4w0xc6" path="res://Assets/Fonts/Poppins/pMedium.ttf" id="3_34klk"]
-[ext_resource type="Script" path="res://Scripts/UI/Retry.cs" id="4_sbyor"]
+[ext_resource type="Script" uid="uid://biistoqt8mvgj" path="res://Scripts/UI/Retry.cs" id="4_sbyor"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b64aa"]
 bg_color = Color(0, 0, 0, 1)
@@ -226,11 +226,11 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a4sbd"]
 _data = {
-"Hover": SubResource("Animation_chfcu"),
-"Idle": SubResource("Animation_qukar"),
-"Init": SubResource("Animation_k6r47"),
-"Normal": SubResource("Animation_e5y0l"),
-"RESET": SubResource("Animation_nph86")
+&"Hover": SubResource("Animation_chfcu"),
+&"Idle": SubResource("Animation_qukar"),
+&"Init": SubResource("Animation_k6r47"),
+&"Normal": SubResource("Animation_e5y0l"),
+&"RESET": SubResource("Animation_nph86")
 }
 
 [node name="Gameover" type="CanvasLayer"]
@@ -307,7 +307,7 @@ script = ExtResource("4_sbyor")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Button"]
 libraries = {
-"": SubResource("AnimationLibrary_a4sbd")
+&"": SubResource("AnimationLibrary_a4sbd")
 }
 
 [node name="TextureRect" type="TextureRect" parent="."]
