@@ -1,17 +1,14 @@
-[gd_scene load_steps=51 format=3 uid="uid://bf03q4af4885f"]
 [gd_scene load_steps=54 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" uid="uid://ct7r3qfr10kpt" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="2_30xyy"]
 [ext_resource type="Texture2D" uid="uid://j2xrc70tafaf" path="res://Assets/Sprites/Player/Runny.png" id="2_t0ndv"]
-[ext_resource type="Script" path="res://Scripts/Player/Health.cs" id="3_oy706"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="3_jucqr"]
 [ext_resource type="Script" uid="uid://cyq7xfk6afav3" path="res://Scripts/Player/Health.cs" id="3_oy706"]
 [ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="4_cbxwr"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_ddygy"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
 [ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
-[ext_resource type="Script" path="res://Scripts/Others/Camera2d.cs" id="6_e0g8t"]
 [ext_resource type="Texture2D" uid="uid://dlm1xosxguil" path="res://Assets/Sprites/Player/book.png" id="11_lsy4k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
@@ -266,6 +263,12 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Resource" id="Resource_k0uux"]
+script = ExtResource("4_ddygy")
+duration = 1.0
+transition = 0
+ease = 2
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fyoq5"]
 atlas = ExtResource("11_lsy4k")
 region = Rect2(0, 0, 32, 32)
@@ -406,7 +409,6 @@ _data = {
 size = Vector2(16, 20)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
-z_index = 20
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
 heartGUI = ExtResource("2_30xyy")
@@ -427,7 +429,10 @@ position = Vector2(-1, 1)
 limit_top = -160
 limit_bottom = 164
 position_smoothing_enabled = true
-script = ExtResource("6_e0g8t")
+
+[node name="PhantomCamera2D" type="Node2D" parent="Camera2D"]
+script = ExtResource("3_jucqr")
+tween_resource = SubResource("Resource_k0uux")
 
 [node name="RayCast2DLeft" type="RayCast2D" parent="."]
 rotation = 1.5708

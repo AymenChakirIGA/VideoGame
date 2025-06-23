@@ -18,7 +18,7 @@ public partial class Slime : CharacterBody2D
 	private Vector2 initialPosition;
 
 	// State
-	private enum States { Idle, Patrolling, Dying, Damaged };
+	private enum States { Idle, Patrolling, Dying };
 	private States currentState = States.Patrolling;
 	private bool isDeath = false;
 
@@ -110,27 +110,6 @@ public partial class Slime : CharacterBody2D
 
 			// Stop velocity
 			velocity = Vector2.Zero;
-		}
-
-		else if (currentState == States.Damaged)
-		{
-			velocity = Vector2.Zero; // Stop movement when damaged
-			Vector2 knockbackDirection = new Vector2( 1, 0);
-
-			//Get Player Position
-			var player = GetParent().GetParent().GetNode("Player") as PlayerController; //IMPORTANT: ADJUST DEPENDING ON THE ENEMY POSITION IN THE SCENE TREE
-			if (player != null)
-			{
-				// Move towards player
-				Vector2 direction = (player.Position - Position).Normalized();
-				knockbackDirection = direction;
-			}
-
-			// Apply knockback effect
-			velocity += -knockbackDirection * 500f + new Vector2(0,40f) ; // Adjust the knockback strength as needed
-
-			//Go to pattrol state after a short delay
-			currentState = States.Patrolling;
 		}
 
 		Velocity = isDeath ? Vector2.Zero : velocity;
