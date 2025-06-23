@@ -29,6 +29,8 @@ public partial class Slime : CharacterBody2D
 	// Health
 	public int Health = 3;
 
+	private bool hitByMelee = false;
+
 	public override void _Ready()
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
@@ -38,6 +40,8 @@ public partial class Slime : CharacterBody2D
 
 		// Connect animation finished for cleanup
 		animationPlayer.AnimationFinished += OnAnimationFinished;
+
+		AddToGroup("mobs");
 	}
 
 	public override void _Process(double delta)
@@ -122,27 +126,40 @@ public partial class Slime : CharacterBody2D
 
 	public async void OnHitboxBodyEntered(Area2D area)
 	{
-		if (area.IsInGroup("bullets"))
+	    // Only take melee damage if the player is actually attacking
+	    if (area.IsInGroup("melee"))
+	    {
+	        var player = area.GetParent() as PlayerController;
+	        if (player != null && player.IsMeleeAttacking() && !hitByMelee)
+	        {
+	            hitByMelee = true;
+	            await TakeDamage(1);
+	        }
+	    }
+	    if (area.IsInGroup("bullets"))
+	    {
+	        await TakeDamage(1);
+	        area.QueueFree();
+	    }
+	}
+
+	public void OnHitboxAreaExited(Area2D area)
+	{
+		if (area.IsInGroup("melee"))
 		{
-			await TakeDamage(1);
-			area.QueueFree();
+			hitByMelee = false;
 		}
 	}
 
-	public async Task TakeDamage(int amount)
+	public Task TakeDamage(int amount)
 	{
 		Health -= amount;
 		GD.Print($"Slime took {amount} damage! Health now: {Health}");
-
-		animationPlayer.Play("Damage", customSpeed: 2f);
-
 		if (Health <= 0)
 		{
-			isDeath = true;
-			currentState = States.Dying;
-			deathVerticalVelocity = -150f; // Give it the pop-up effect
-			animationPlayer.Play("Death");
+			QueueFree();
 		}
+		return Task.CompletedTask;
 	}
 
 	private void OnAnimationFinished(StringName animName)
@@ -151,5 +168,10 @@ public partial class Slime : CharacterBody2D
 		{
 			QueueFree(); // Clean up enemy
 		}
+	}
+
+	public void ResetMeleeHit()
+	{
+	    hitByMelee = false;
 	}
 }
