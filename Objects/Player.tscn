@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=54 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" uid="uid://by03hk4ppf4iv" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="2_30xyy"]
@@ -406,6 +406,9 @@ _data = {
 &"Shoot_Reverse": SubResource("Animation_ekx72")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ryu0"]
+size = Vector2(12, 20)
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
@@ -421,6 +424,7 @@ shape = SubResource("RectangleShape2D_tjrg2")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ovccg")
 animation = &"Melee_1"
+frame_progress = 0.562442
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)
@@ -506,6 +510,15 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
+[node name="MeleeArea" type="Area2D" parent="."]
+visible = false
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeArea"]
+position = Vector2(12, 2)
+shape = SubResource("RectangleShape2D_0ryu0")
+
 [connection signal="timeout" from="KnockedBackTimer" to="." method="OnKnockedBackTimerTimeout"]
 [connection signal="timeout" from="BlinkTimer" to="." method="OnBlinkTimeout"]
 [connection signal="timeout" from="InvincibleTimer" to="." method="OnInvincibleTimeout"]
+[connection signal="area_entered" from="MeleeArea" to="." method="_on_melee_area_area_entered"]

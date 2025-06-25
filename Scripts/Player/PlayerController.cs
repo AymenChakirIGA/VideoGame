@@ -48,7 +48,10 @@ public partial class PlayerController : CharacterBody2D
     private bool isKnockedBack = false;
     private bool isInvincible = false;
     private bool isShooting = false;
-    
+    private Area2D meleeArea;
+    private Timer meleeTimer;
+    private bool canMelee = true;
+    private bool isMeleeAttacking = false;
 
     Health health;
     [Export]
@@ -82,17 +85,27 @@ public partial class PlayerController : CharacterBody2D
         {
             Position = global.CheckpointPosition;
         }
+
+        meleeArea = GetNode<Area2D>("MeleeArea");
+        meleeArea.AddToGroup("melee");
+        meleeArea.Monitoring = false;
+        meleeArea.Visible = false;
+
+        // Add a timer for melee cooldown/duration
+        meleeTimer = new Timer();
+        meleeTimer.OneShot = true;
+        meleeTimer.WaitTime = 0.2f; // Melee active duration
+        AddChild(meleeTimer);
+        meleeTimer.Timeout += OnMeleeTimerTimeout;
     }
     public override void _Process(double delta)
     {
         DebugPlayer();
-        // Update facing direction (optional, based on your movement logic)
         if (Input.IsActionPressed("right"))
             facingDirection = Vector2.Right;
         else if (Input.IsActionPressed("left"))
             facingDirection = Vector2.Left;
 
-        // Shoot when the shoot button is pressed
         if (Input.IsActionJustPressed("shoot"))
             Shoot();
 
@@ -102,6 +115,11 @@ public partial class PlayerController : CharacterBody2D
         if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
         BookAnimation();
 
+        // Melee attack input
+        if (Input.IsActionJustPressed("melee") && canMelee)
+        {
+            MeleeAttack();
+        }
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -430,6 +448,37 @@ public partial class PlayerController : CharacterBody2D
             sprite.FlipH = (facingDirection == Vector2.Left);
 
         GetTree().CurrentScene.AddChild(bullet);
+    }
+
+    private void MeleeAttack()
+    {
+        // Reset all slimes' melee flags before a new attack
+        foreach (var slime in GetTree().GetNodesInGroup("mobs"))
+        {
+            if (slime is Slime s)
+                s.ResetMeleeHit();
+        }
+
+        canMelee = false;
+        isMeleeAttacking = true;
+        meleeArea.Monitoring = true;
+        meleeArea.Visible = true;
+        meleeTimer.Start();
+        sprite.Play("Melee_1");
+    }
+
+    private void OnMeleeTimerTimeout()
+    {
+        meleeArea.Monitoring = false;
+        meleeArea.Visible = false;
+        canMelee = true;
+        isMeleeAttacking = false;
+    }
+
+    // For the slime to check if the player is attacking
+    public bool IsMeleeAttacking()
+    {
+        return isMeleeAttacking;
     }
 
     //Health System
