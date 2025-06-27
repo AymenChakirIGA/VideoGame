@@ -39,6 +39,7 @@ public partial class PlayerController : CharacterBody2D
     private Vector2 spawnPosition;
     [Export] public PackedScene GameOverScene;
     [Export] PackedScene heartGUI;
+    private PlayerCamera playerCamera;
     private bool wasOnFloor = false;
     private bool isWallSliding = false;
     private bool isRunning = false;
@@ -74,6 +75,7 @@ public partial class PlayerController : CharacterBody2D
         bookSprite = GetNode<AnimatedSprite2D>("Book");
         bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
         BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
+        playerCamera = GetNode<PlayerCamera>("Camera2D");
         currentHealth = maxHealth;
         spawnPosition = Position;
         updateHeartUI();
