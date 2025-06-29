@@ -403,6 +403,7 @@ _data = {
 size = Vector2(12, 20)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
+z_index = 50
 position = Vector2(135, 117)
 script = ExtResource("1_ov03d")
 GameOverScene = ExtResource("2_hndq2")

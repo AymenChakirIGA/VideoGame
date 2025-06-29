@@ -409,7 +409,7 @@ script = ExtResource("3_krxob")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Button"]
 libraries = {
-"": SubResource("AnimationLibrary_fttfk")
+&"": SubResource("AnimationLibrary_fttfk")
 }
 
 [node name="Button2" type="Button" parent="VBoxContainer"]
@@ -426,7 +426,7 @@ script = ExtResource("3_krxob")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Button2"]
 libraries = {
-"": SubResource("AnimationLibrary_fttfk")
+&"": SubResource("AnimationLibrary_fttfk")
 }
 
 [node name="Button3" type="Button" parent="VBoxContainer"]
@@ -443,12 +443,12 @@ script = ExtResource("3_krxob")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Button3"]
 libraries = {
-"": SubResource("AnimationLibrary_fttfk")
+&"": SubResource("AnimationLibrary_fttfk")
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_fufhi")
+&"": SubResource("AnimationLibrary_fufhi")
 }
 
 [connection signal="mouse_entered" from="VBoxContainer/Button" to="VBoxContainer/Button" method="onMouseEnter"]

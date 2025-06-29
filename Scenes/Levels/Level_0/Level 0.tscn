@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=16 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
+[ext_resource type="PackedScene" uid="uid://dxqfi87se37ik" path="res://Objects/UI_Components/clear_screen.tscn" id="1_b6k65"]
 [ext_resource type="PackedScene" uid="uid://bbkll8h5sfvar" path="res://Objects/UI_Components/pause_menu.tscn" id="1_bcu6k"]
 [ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_hk03o"]
 [ext_resource type="PackedScene" uid="uid://cued7siu7scq" path="res://Objects/UI_Components/HUD.tscn" id="1_rvmcr"]
@@ -10,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://bky8x80vakako" path="res://Assets/Levels/Level 0/Tileset/forest v1.png" id="6_onomb"]
 [ext_resource type="PackedScene" uid="uid://du2f7dtt6qmpv" path="res://Objects/Enemies/slime.tscn" id="7_ro4y0"]
 [ext_resource type="PackedScene" uid="uid://bvdulwpcxvosp" path="res://Objects/Others/checkpoint.tscn" id="10_gbidr"]
+[ext_resource type="PackedScene" uid="uid://cleod63f0lf6" path="res://Objects/Others/goal.tscn" id="11_f2wf2"]
+[ext_resource type="PackedScene" uid="uid://bfmjewad3ojq4" path="res://Objects/Others/chearing_companions.tscn" id="12_ghmkd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g2ckj"]
 texture = ExtResource("6_onomb")
@@ -56,6 +59,8 @@ sources/0 = SubResource("TileSetAtlasSource_g2ckj")
 
 [node name="Level0" type="Node2D"]
 
+[node name="Clear Screen" parent="." instance=ExtResource("1_b6k65")]
+
 [node name="Pause Menu" parent="." instance=ExtResource("1_bcu6k")]
 
 [node name="CanvasLayer" parent="." instance=ExtResource("1_rvmcr")]
@@ -99,7 +104,7 @@ centered = false
 [node name="Ground" type="TileMap" parent="Map"]
 tile_set = SubResource("TileSet_l3q03")
 format = 2
-layer_0/tile_data = PackedInt32Array(327675, 65536, 1, 327676, 131072, 1, 327677, 131072, 1, 327678, 131072, 1, 327679, 131072, 1, 262144, 131072, 1, 262145, 131072, 1, 262146, 131072, 1, 262147, 131072, 1, 196614, 65536, 1, 196615, 262144, 1, 65545, 65536, 1, 65546, 131072, 1, 65547, 196608, 1, 65548, 262144, 1, 393211, 65536, 2, 393213, 65536, 2, 393214, 65536, 2, 327680, 65536, 2, 327681, 65536, 2, 327682, 65536, 2, 327683, 262144, 2, 393215, 262144, 2, 393212, 262144, 2)
+layer_0/tile_data = PackedInt32Array(327675, 65536, 1, 327676, 131072, 1, 327677, 131072, 1, 327678, 131072, 1, 327679, 131072, 1, 262144, 131072, 1, 262145, 131072, 1, 262146, 131072, 1, 262147, 131072, 1, 196614, 65536, 1, 196615, 262144, 1, 65545, 65536, 1, 65546, 131072, 1, 65547, 196608, 1, 65548, 262144, 1, 393211, 65536, 2, 393213, 65536, 2, 393214, 65536, 2, 327680, 65536, 2, 327681, 65536, 2, 327682, 65536, 2, 327683, 262144, 2, 393215, 262144, 2, 393212, 262144, 2, 262161, 65536, 1, 262162, 196608, 1, 262163, 196608, 1, 262164, 196608, 1, 262165, 196608, 1, 327697, 262144, 2, 327698, 196608, 2, 393234, 262144, 2, 393233, 196608, 2, 393235, 196608, 2, 327699, 196608, 2, 327700, 262144, 2, 393236, 196608, 2, 327701, 196608, 2, 393237, 196608, 2, 262166, 196608, 1, 262167, 262144, 1, 327702, 262144, 2, 393238, 262144, 2, 393239, 262144, 2, 327703, 262144, 2)
 
 [node name="Background" type="TileMap" parent="Map"]
 tile_set = SubResource("TileSet_l3q03")
@@ -123,3 +128,9 @@ scale = Vector2(2, 2)
 position = Vector2(232, 77)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Goal" parent="." instance=ExtResource("11_f2wf2")]
+position = Vector2(677, 92)
+
+[node name="Chearing_Companions" parent="." instance=ExtResource("12_ghmkd")]
+position = Vector2(651, 100)

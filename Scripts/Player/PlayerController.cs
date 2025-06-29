@@ -226,7 +226,6 @@ public partial class PlayerController : CharacterBody2D
             textureProgressBar.Value = Stamina;
             StaminaShow();
             isGliding = true;
-            Debug.Print(velocity.Y.ToString());
             if (velocity.Y > 0)
             {
                 velocity.Y = Math.Clamp(velocity.Y, 0, 50f);

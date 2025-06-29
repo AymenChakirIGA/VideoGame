@@ -36,12 +36,17 @@ public partial class PlayerCamera : Camera2D
         else if (zoom > targetZoom)
         {
             // Zoom out
-            if (zoom - new Vector2(zoomSpeed * delta, zoomSpeed * delta ) < targetZoom) zoom = targetZoom; // If zoom goes below target, set it to target
+            if (zoom - new Vector2(zoomSpeed * delta, zoomSpeed * delta) < targetZoom) zoom = targetZoom; // If zoom goes below target, set it to target
             else zoom -= new Vector2(zoomSpeed * delta, zoomSpeed * delta);
         }
     }
     public void SetTargetZoom(Vector2 newTargetZoom)
     {
         targetZoom = newTargetZoom;
+    }
+    
+    public void SetZoomSpeed(float newZoomSpeed)
+    {
+        zoomSpeed = newZoomSpeed;
     }
 }
