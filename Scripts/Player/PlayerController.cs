@@ -49,6 +49,7 @@ public partial class PlayerController : CharacterBody2D
     private bool isKnockedBack = false;
     private bool isInvincible = false;
     private bool isShooting = false;
+    private bool isFatigued = false;
     private Area2D meleeArea;
     private Timer meleeTimer;
     private bool canMelee = true;
@@ -63,6 +64,7 @@ public partial class PlayerController : CharacterBody2D
 
     public override void _Ready()
     {
+        //GET NODE
         health = GetNode<Health>("Health");
         textureProgressBar = GetNode("Stamina").GetNode<TextureProgressBar>("TextureProgressBar");
         textureProgressBar.Value = 100;
@@ -76,6 +78,8 @@ public partial class PlayerController : CharacterBody2D
         bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
         BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
         playerCamera = GetNode<PlayerCamera>("Camera2D");
+
+        //Init Variables
         currentHealth = maxHealth;
         spawnPosition = Position;
         updateHeartUI();
@@ -113,6 +117,10 @@ public partial class PlayerController : CharacterBody2D
 
         //Stamina Process Code
         StaminaRecovery();
+
+        //Handle Fatigue State
+        HandleFatigueState();
+
         //Hide Stamina if no activity
         if (!isRunning && !isGliding && Stamina >= 100.0f) StaminaHide();
         BookAnimation();
@@ -190,6 +198,35 @@ public partial class PlayerController : CharacterBody2D
         wasOnFloor = isOnFloor; // Update the floor status
     }
 
+    private void HandleFatigueState()
+    {
+        if (!isFatigued)
+        {
+            isFatigued = Stamina <= 0f;
+            textureProgressBar.TintOver = new Color(41, 41, 41, alphaValue); //Default Color
+            textureProgressBar.TintProgress = new Color(0, 221, 144, alphaValue); //Default Color
+            
+        }
+        else
+        {
+            // Tint part of the progress bar red for visual indication
+            textureProgressBar.TintOver = new Color(255f, 0, 0, alphaValue); 
+            textureProgressBar.TintProgress = new Color(255f, 0, 0, alphaValue);
+
+            if (Stamina < 100.0f)
+            {
+                // If the player is fatigued, reduce speed and disable running
+                Speed = Mathf.Lerp(Speed, 50f, deltaValue * 5f);
+                isRunning = false;
+            }
+            else
+            {
+                isFatigued = false;
+            }
+
+        }
+    }
+
     private Vector2 HandleJump(Vector2 velocity)
     {
         //Jumping and wall jumping mechanics
@@ -251,7 +288,7 @@ public partial class PlayerController : CharacterBody2D
     private float HorizontalMovement(Vector2 velocity, Vector2 direction, float Speed)
     {
         //Handles the horizontal movement of the player
-        isRunning = Input.IsActionPressed("Run") && Stamina > 0 && direction != Vector2.Zero && !isGliding;
+        isRunning = Input.IsActionPressed("Run") && Stamina > 0 && direction != Vector2.Zero && !isGliding && !isFatigued;
         if (direction != Vector2.Zero)
         {
             velocity.X += direction.X * acceleration;
@@ -331,6 +368,7 @@ public partial class PlayerController : CharacterBody2D
 
     private void StaminaHide()
     {
+        //Gradually Hide the stamina bar
         if (alphaValue > 0f)
         {
             alphaValue = Math.Clamp(alphaValue - deltaValue, 0f, 0.5f);
@@ -342,6 +380,7 @@ public partial class PlayerController : CharacterBody2D
 
     private void StaminaShow()
     {
+        //Gradually Show the stamina bar
         if (alphaValue < 0.5f)
         {
             //Gradually Increase the opacity of the stamina bar

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=17 format=3 uid="uid://cp4yop42e88nw"]
 
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
 [ext_resource type="PackedScene" uid="uid://dxqfi87se37ik" path="res://Objects/UI_Components/clear_screen.tscn" id="1_b6k65"]
@@ -57,6 +57,10 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 3
 sources/0 = SubResource("TileSetAtlasSource_g2ckj")
 
+[sub_resource type="Environment" id="Environment_b6k65"]
+background_mode = 3
+background_color = Color(0.12549, 0.615686, 0.94902, 1)
+
 [node name="Level0" type="Node2D"]
 
 [node name="Clear Screen" parent="." instance=ExtResource("1_b6k65")]
@@ -70,6 +74,24 @@ currentWeather = 1
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scale = Vector2(1.2, 1.2)
 transform = Transform2D(1.2, 0, 0, 1.2, 0, 0)
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(576, 0)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/ParallaxLayer4"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -648.0
+offset_right = 576.0
+offset_bottom = 163.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+color = Color(0.12549, 0.615686, 0.94902, 1)
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 position = Vector2(-576, -160)
@@ -134,3 +156,6 @@ position = Vector2(677, 92)
 
 [node name="Chearing_Companions" parent="." instance=ExtResource("12_ghmkd")]
 position = Vector2(651, 100)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b6k65")

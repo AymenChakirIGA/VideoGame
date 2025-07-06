@@ -422,7 +422,7 @@ frame_progress = 0.562442
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(-1, 1)
-limit_top = -160
+limit_top = -200
 limit_bottom = 164
 position_smoothing_enabled = true
 script = ExtResource("6_ivlea")
