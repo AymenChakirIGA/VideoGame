@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://du2f7dtt6qmpv"]
+[gd_scene load_steps=15 format=3 uid="uid://du2f7dtt6qmpv"]
 
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
 [ext_resource type="Script" uid="uid://bp57ra1ohjf86" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
@@ -136,6 +136,18 @@ _data = {
 &"RESET": SubResource("Animation_banyi")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fedjo"]
+bg_color = Color(0.109341, 0.109341, 0.109341, 0.588235)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+anti_aliasing_size = 0.01
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftc5r"]
+bg_color = Color(0.936843, 3.82639e-06, 1.15514e-06, 1)
+
 [node name="Slime" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 2
@@ -170,7 +182,29 @@ libraries = {
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.003
 
+[node name="Health" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ProgressBar" type="ProgressBar" parent="Health"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = -12.0
+offset_top = -14.0
+offset_right = 12.0
+offset_bottom = -10.0
+theme_override_styles/background = SubResource("StyleBoxFlat_fedjo")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ftc5r")
+rounded = true
+show_percentage = false
+
+[node name="HealthBarAnimationTimer" type="Timer" parent="Health"]
+wait_time = 0.5
+
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
 [connection signal="area_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
 [connection signal="timeout" from="DamageTimer" to="." method="onTimerTimout"]
+[connection signal="timeout" from="Health/HealthBarAnimationTimer" to="." method="onHeathBarAnimationTimeOut"]

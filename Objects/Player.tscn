@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bf03q4af4885f"]
+[gd_scene load_steps=51 format=3 uid="uid://bf03q4af4885f"]
 
 [ext_resource type="Script" uid="uid://by03hk4ppf4iv" path="res://Scripts/Player/PlayerController.cs" id="1_ov03d"]
 [ext_resource type="PackedScene" uid="uid://d3o13kdwgyhju" path="res://Objects/UI_Components/Heart.tscn" id="2_30xyy"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://b5hhtc6byb0t5" path="res://Objects/Powers/bullet.tscn" id="4_cbxwr"]
 [ext_resource type="Texture2D" uid="uid://pw87kfhgcxoj" path="res://Assets/UI/ProgressBar/progress-bar-circle.png" id="4_rdqsv"]
 [ext_resource type="Texture2D" uid="uid://buhgvspnx5q2w" path="res://Assets/UI/ProgressBar/progress-bar-frame.png" id="5_smjss"]
-[ext_resource type="Script" uid="uid://tsl4bjpaw32w" path="res://Scripts/Player/PlayerCamera.cs" id="6_ivlea"]
 [ext_resource type="Texture2D" uid="uid://dlm1xosxguil" path="res://Assets/Sprites/Player/book.png" id="11_lsy4k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tjrg2"]
@@ -419,13 +418,6 @@ texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ovccg")
 animation = &"Melee_1"
 frame_progress = 0.562442
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-1, 1)
-limit_top = -200
-limit_bottom = 164
-position_smoothing_enabled = true
-script = ExtResource("6_ivlea")
 
 [node name="RayCast2DLeft" type="RayCast2D" parent="."]
 rotation = 1.5708

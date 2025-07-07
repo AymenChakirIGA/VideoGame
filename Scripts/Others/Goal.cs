@@ -11,7 +11,7 @@ public partial class Goal : Node2D
     {
         animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         animatedSprite.Play("Idle");
-        playerCamera = GetParent().GetNode("Player").GetNode<PlayerCamera>("Camera2D");
+        playerCamera = GetParent().GetNode<PlayerCamera>("Camera2D");
         clearScreen = GetParent().GetNode("Clear Screen") as ClearScreen;
     }
 

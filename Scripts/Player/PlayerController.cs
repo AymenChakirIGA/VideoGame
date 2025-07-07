@@ -77,7 +77,7 @@ public partial class PlayerController : CharacterBody2D
         bookSprite = GetNode<AnimatedSprite2D>("Book");
         bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
         BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
-        playerCamera = GetNode<PlayerCamera>("Camera2D");
+        playerCamera = GetParent().GetNode<PlayerCamera>("Camera2D");
 
         //Init Variables
         currentHealth = maxHealth;

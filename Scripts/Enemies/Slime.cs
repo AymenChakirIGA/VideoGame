@@ -17,6 +17,7 @@ public partial class Slime : CharacterBody2D
     private bool isFacingRight = true;
     private Vector2 initialPosition;
     private Timer damageTimer;
+    private ProgressBar healthBar;
 
     // State
     private enum States { Idle, Patrolling, Dying, TakenDamage };
@@ -27,9 +28,14 @@ public partial class Slime : CharacterBody2D
     private float deathVerticalVelocity = -150f; // Initial pop-up speed
     private float deathGravity = 500f;           // Pull-down force
     private bool isHitDirectionRight = true; // Direction of the hit
+    private float alphaValue = 0f; // Alpha value of the Health Bar 
+    private float deltaValue = 0f;
+    private bool isHealthBarShow = false;
+    private Timer healthBarTimerAnimation;
 
     // Health
-    public int Health = 3;
+    private int currentHealth;
+    private int maxHealth = 3;
 
     // Melee hit flag
     private bool hitByMelee = false;
@@ -40,7 +46,13 @@ public partial class Slime : CharacterBody2D
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         collision = GetNode<CollisionShape2D>("CollisionShape2D");
         damageTimer = GetNode<Timer>("DamageTimer");
+        healthBar = GetNode("Health").GetNode<ProgressBar>("ProgressBar");
+        healthBarTimerAnimation = GetNode("Health").GetNode<Timer>("HealthBarAnimationTimer");
+
+        //Init Variables
         initialPosition = Position;
+        currentHealth = maxHealth;
+        healthBar.Value = 100f;
 
         // Connect animation finished for cleanup
         animationPlayer.AnimationFinished += OnAnimationFinished;
@@ -54,6 +66,12 @@ public partial class Slime : CharacterBody2D
         {
             animatedSprite.Play("Idle", customSpeed: 0.5f);
         }
+
+        //update the deta value accordingly
+        deltaValue = (float)delta;
+
+        if (isHealthBarShow) HealthBarShow();
+        else HealthBarHide();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -137,7 +155,7 @@ public partial class Slime : CharacterBody2D
         }
     }
 
-    public async void OnHitboxBodyEntered(Area2D area)
+    public void OnHitboxBodyEntered(Area2D area)
     {
         // Melee damage
         if (area.IsInGroup("melee"))
@@ -146,14 +164,14 @@ public partial class Slime : CharacterBody2D
             if (player != null && player.IsMeleeAttacking() && !hitByMelee)
             {
                 hitByMelee = true;
-                await TakeDamage(1);
+                TakeDamage(1);
             }
         }
         // Bullet damage
         if (area.IsInGroup("bullets"))
         {
             this.isHitDirectionRight = area.Position.X > Position.X;
-            await TakeDamage(1);
+            TakeDamage(1);
             area.QueueFree();
         }
     }
@@ -163,14 +181,19 @@ public partial class Slime : CharacterBody2D
         hitByMelee = false;
     }
 
-    public async Task TakeDamage(int amount)
+    public void TakeDamage(int amount)
     {
-        Health -= amount;
-        GD.Print($"Slime took {amount} damage! Health now: {Health}");
+        currentHealth -= amount;
+        healthBar.Value = calculateHealthPercentage(currentHealth, maxHealth); //set the right value in the progress bar
+        GD.Print($"Slime took {amount} damage! Health now: {currentHealth}");
 
         animationPlayer.Play("Damage", customSpeed: 2f);
 
-        if (Health <= 0)
+        //Health Bar Animation
+        isHealthBarShow = true;
+        healthBarTimerAnimation.Start();
+
+        if (currentHealth <= 0)
         {
             isDeath = true;
             currentState = States.Dying;
@@ -191,6 +214,24 @@ public partial class Slime : CharacterBody2D
         }
     }
 
+    private void HealthBarShow()
+    {
+        if (alphaValue < 0.4f) alphaValue = Math.Clamp(alphaValue + deltaValue, 0f, 0.4f);
+        healthBar.Modulate = new Color(healthBar.Modulate.R, healthBar.Modulate.G, healthBar.Modulate.B, alphaValue);
+    }
+
+    private void HealthBarHide()
+    {
+        if (alphaValue > 0f) alphaValue = Math.Clamp(alphaValue - deltaValue, 0f, 0.4f);
+        healthBar.Modulate = new Color(healthBar.Modulate.R, healthBar.Modulate.G, healthBar.Modulate.B, alphaValue);
+    }
+
+    private float calculateHealthPercentage(int currentHealth, int maxHealth)
+    {
+        return ((100 * currentHealth) / maxHealth);
+    }
+
+    //Signals
     private void onTimerTimout()
     {
         // Reset the state after damage animation
@@ -201,4 +242,10 @@ public partial class Slime : CharacterBody2D
             currentState = States.Patrolling;
         }
     }
+
+    private void onHeathBarAnimationTimeOut()
+    {
+        isHealthBarShow = false;
+    }
+
 }
