@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bjw4joy347ykk" path="res://Assets/UI/HUD/Weather/Sunny.png" id="4_4ymhq"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
+layer = 0
 script = ExtResource("1_f8y1k")
 Sunny = ExtResource("4_4ymhq")
 Night = ExtResource("3_o71ym")

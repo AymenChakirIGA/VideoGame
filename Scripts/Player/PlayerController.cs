@@ -256,7 +256,7 @@ public partial class PlayerController : CharacterBody2D
 
     private float HandleGlide(Vector2 velocity)
     {
-        if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && Stamina > 0f)
+        if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && !isFatigued && Stamina > 0f)
         {
             //Gliding when it's not on floor
             Stamina -= 0.5f;
@@ -556,21 +556,26 @@ public partial class PlayerController : CharacterBody2D
     {
         if (isInvincible) return;
         SetCurrentHealth(currentHealth - heartDamage); 
-        blinkTimer.Start();
-        knockedBackTimer.Start();
-        invincibleTimer.Start();
         Vector2 velocity = Velocity;
-        isKnockedBack = true;
-        isInvincible = true;
-        velocity.X = 130f * (isFacingRight ? -1 : 1);
-        velocity.Y = -100f;
-        Velocity = velocity;
+
 
         //Update hearts counter
         if (currentHealth <= 0)
         {
             //if health is lower than 0 it's game over
             GameOver();
+        }
+        else
+        {
+            // KnockBack the player if recieved a damaged and his health is greater than 0
+            knockedBackTimer.Start();
+            invincibleTimer.Start();
+            blinkTimer.Start();
+            velocity.X = 130f * (isFacingRight ? -1 : 1);
+            velocity.Y = -100f;
+            Velocity = velocity;
+            isKnockedBack = true;
+            isInvincible = true;
         }
         var animationPlayer = heartsContainter.GetChild(currentHealth-1).GetNode<AnimationPlayer>("AnimationPlayer");
         animationPlayer.Play("Break");

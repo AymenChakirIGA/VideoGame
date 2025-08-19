@@ -1,0 +1,72 @@
+[gd_scene load_steps=10 format=3 uid="uid://c1u6owh4kuagv"]
+
+[ext_resource type="Texture2D" uid="uid://bchxj5bisedly" path="res://Assets/Sprites/Level Obstacles/StateSpike.png" id="1_iut60"]
+[ext_resource type="Script" uid="uid://civabvtia42ee" path="res://Scripts/Level Obstacles/StateSpikes.cs" id="1_l25r4"]
+[ext_resource type="PackedScene" uid="uid://dojxh7kdyumn6" path="res://Objects/Others/damage_area.tscn" id="2_l25r4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t4q3t"]
+atlas = ExtResource("1_iut60")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lckj4"]
+atlas = ExtResource("1_iut60")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5kjd"]
+atlas = ExtResource("1_iut60")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n27nr"]
+atlas = ExtResource("1_iut60")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gph1a"]
+atlas = ExtResource("1_iut60")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a03dr"]
+animations = [{
+"frames": [{
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_t4q3t")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_lckj4")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_r5kjd")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_n27nr")
+}],
+"loop": false,
+"name": &"Open_Close",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gph1a")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="State Spikes" type="Node2D"]
+script = ExtResource("1_l25r4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_a03dr")
+animation = &"Open_Close"
+frame = 3
+frame_progress = 1.0
+
+[node name="Damage Area" parent="." instance=ExtResource("2_l25r4")]
+position = Vector2(0, 8)
+scale = Vector2(1.5, 0.8)
+damage = 1
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="OnTimeout"]

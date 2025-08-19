@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1armd4bo1xfn"]
+
+[ext_resource type="Texture2D" uid="uid://4b262ilmiun5" path="res://Assets/Sprites/Level Obstacles/Spikes.png" id="1_gyxgs"]
+[ext_resource type="PackedScene" uid="uid://dojxh7kdyumn6" path="res://Objects/Others/damage_area.tscn" id="2_3fjg3"]
+
+[node name="Spikes" type="Node2D"]
+scale = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_gyxgs")
+
+[node name="Damage Area" parent="." instance=ExtResource("2_3fjg3")]
+position = Vector2(0, 6)
+scale = Vector2(1.5, 1)
+damage = 1

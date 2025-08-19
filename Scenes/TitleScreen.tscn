@@ -1,0 +1,472 @@
+[gd_scene load_steps=28 format=3 uid="uid://ku1g0ji75tcd"]
+
+[ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_pie25"]
+[ext_resource type="Script" uid="uid://cveyi0r77p1kl" path="res://Scenes/Levels/Level_0/CloudLayout.cs" id="2_2jiiu"]
+[ext_resource type="Texture2D" uid="uid://dnv4ciwl6f4kl" path="res://Assets/Levels/Level 0/Clouds/2.png" id="3_awp6w"]
+[ext_resource type="Texture2D" uid="uid://c7mq5mjitkvxy" path="res://Assets/Levels/Level 0/Clouds/4.png" id="4_qu6cc"]
+[ext_resource type="Texture2D" uid="uid://c3wbgl011dp7r" path="res://Assets/Levels/Level 0/Tileset/forest v2.png" id="5_4hokt"]
+[ext_resource type="Texture2D" uid="uid://1lyck58niheq" path="res://Assets/Levels/Level 0/Tileset/Tileset.png" id="6_swiah"]
+[ext_resource type="Texture2D" uid="uid://3l1tkxakkth5" path="res://Assets/Sprites/Others/Leaf.png" id="7_75epk"]
+[ext_resource type="Texture2D" uid="uid://cm632y7coop80" path="res://Assets/Sprites/Player/Runny_v2.png" id="8_3ah5x"]
+[ext_resource type="AudioStream" uid="uid://5lymqbtgg5m2" path="res://Assets/OST/OST-01.wav" id="9_jhb10"]
+[ext_resource type="Texture2D" uid="uid://cgnrtm6rpvnch" path="res://Assets/UI/Global/The witch with an umbrella.png" id="10_deutk"]
+[ext_resource type="FontFile" uid="uid://ck320q58bkj52" path="res://Assets/Fonts/Poppins/Poppins-Black.ttf" id="11_fvr0n"]
+
+[sub_resource type="Animation" id="Animation_oqr8k"]
+resource_name = "Camera Intro Animation"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.03333),
+"transitions": PackedFloat32Array(1, 1.86607, 1),
+"update": 0,
+"values": [Vector2(0, -150), Vector2(0, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CanvasLayer/TextureRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_hsahl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CanvasLayer/TextureRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vwuac"]
+_data = {
+&"Camera Intro Animation": SubResource("Animation_oqr8k"),
+&"RESET": SubResource("Animation_hsahl")
+}
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bgtb3"]
+texture = ExtResource("5_4hokt")
+texture_region_size = Vector2i(32, 32)
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+4:4/0 = 0
+9:4/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+1:2/0 = 0
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+10:2/0 = 0
+11:2/0 = 0
+11:3/0 = 0
+10:3/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+13:3/0 = 0
+12:3/0 = 0
+11:5/0 = 0
+11:4/0 = 0
+12:5/0 = 0
+10:5/0 = 0
+14:2/0 = 0
+15:2/0 = 0
+16:2/0 = 0
+17:2/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+14:3/0 = 0
+15:3/0 = 0
+16:3/0 = 0
+17:3/0 = 0
+15:4/0 = 0
+16:4/0 = 0
+17:4/0 = 0
+18:4/0 = 0
+13:5/0 = 0
+15:5/0 = 0
+16:5/0 = 0
+17:5/0 = 0
+18:5/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+15:6/0 = 0
+16:6/0 = 0
+17:6/0 = 0
+18:6/0 = 0
+2:7/0 = 0
+10:7/0 = 0
+15:7/0 = 0
+16:7/0 = 0
+17:7/0 = 0
+18:7/0 = 0
+4:8/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oqr8k"]
+texture = ExtResource("6_swiah")
+texture_region_size = Vector2i(32, 32)
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+14:2/0 = 0
+15:2/0 = 0
+16:2/0 = 0
+17:2/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+14:3/0 = 0
+15:3/0 = 0
+16:3/0 = 0
+17:3/0 = 0
+4:4/0 = 0
+9:4/0 = 0
+11:4/0 = 0
+15:4/0 = 0
+16:4/0 = 0
+17:4/0 = 0
+18:4/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+15:5/0 = 0
+16:5/0 = 0
+17:5/0 = 0
+18:5/0 = 0
+3:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+15:6/0 = 0
+16:6/0 = 0
+17:6/0 = 0
+18:6/0 = 0
+2:7/0 = 0
+10:7/0 = 0
+15:7/0 = 0
+16:7/0 = 0
+17:7/0 = 0
+18:7/0 = 0
+4:8/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+1:11/0 = 0
+2:11/0 = 0
+3:11/0 = 0
+4:11/0 = 0
+1:12/0 = 0
+2:12/0 = 0
+3:12/0 = 0
+4:12/0 = 0
+1:14/0 = 0
+2:14/0 = 0
+3:14/0 = 0
+4:14/0 = 0
+1:15/0 = 0
+2:15/0 = 0
+3:15/0 = 0
+4:15/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_244ny"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 3
+sources/1 = SubResource("TileSetAtlasSource_oqr8k")
+sources/0 = SubResource("TileSetAtlasSource_bgtb3")
+
+[sub_resource type="Gradient" id="Gradient_bgtb3"]
+offsets = PackedFloat32Array(0, 0.238889, 0.694444, 0.961111)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_244ny"]
+gradient = SubResource("Gradient_bgtb3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sxoqs"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(2, 2, 1)
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+initial_velocity_min = 10.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, 20, 0)
+color_ramp = SubResource("GradientTexture1D_244ny")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_el0eq"]
+atlas = ExtResource("8_3ah5x")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqr8k"]
+atlas = ExtResource("8_3ah5x")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsahl"]
+atlas = ExtResource("8_3ah5x")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vwuac"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_el0eq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oqr8k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hsahl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_2jiiu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pie25"]
+resource_name = "Text Animation"
+loop_mode = 1
+capture_included = true
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 2,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_awp6w"]
+_data = {
+&"RESET": SubResource("Animation_2jiiu"),
+&"Text Animation": SubResource("Animation_pie25")
+}
+
+[node name="TitleScreen" type="Node2D"]
+
+[node name="Intro Animation" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Camera2D")
+libraries = {
+&"": SubResource("AnimationLibrary_vwuac")
+}
+autoplay = "Camera Intro Animation"
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scale = Vector2(1.2, 1.2)
+transform = Transform2D(1.2, 0, 0, 1.2, 0, 0)
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(576, 0)
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/ParallaxLayer4"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -648.0
+offset_right = 576.0
+offset_bottom = 163.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+color = Color(0.12549, 0.615686, 0.94902, 1)
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(-576, -160)
+motion_mirroring = Vector2(576, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("1_pie25")
+centered = false
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(-572, -160)
+motion_offset = Vector2(288, 0)
+motion_mirroring = Vector2(576, 0)
+script = ExtResource("2_2jiiu")
+Cloud_speed = 10.0
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2"]
+texture = ExtResource("3_awp6w")
+centered = false
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(-576, -160)
+motion_mirroring = Vector2(576, 0)
+script = ExtResource("2_2jiiu")
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3"]
+texture = ExtResource("4_qu6cc")
+centered = false
+
+[node name="Map" type="Node" parent="."]
+
+[node name="Ground" type="TileMap" parent="Map"]
+tile_set = SubResource("TileSet_244ny")
+format = 2
+layer_0/tile_data = PackedInt32Array(393212, 131072, 2, 393215, 131072, 2, 327680, 131072, 2, 327681, 131072, 2, 327682, 131072, 2, 327683, 131072, 2, 327684, 131072, 2, 327685, 131072, 2, 327686, 131072, 2, 327687, 131072, 2, 327688, 131072, 2, 327689, 131072, 2, 327690, 131072, 2, 393214, 131072, 2, 393213, 131072, 2, 327670, 131072, 1, 327671, 131072, 1, 327672, 131072, 1, 327673, 131072, 1, 327674, 131072, 1, 327675, 131072, 1, 327676, 196608, 1, 327677, 131072, 1, 327678, 131072, 1, 327679, 131072, 1, 262151, 196608, 1, 262152, 131072, 1, 262153, 131072, 1, 262154, 131072, 1, 262150, 196608, 1, 262149, 131072, 1, 262148, 196608, 1, 262147, 131072, 1, 262146, 196608, 1, 262145, 196608, 1, 262144, 196608, 1, 393211, 131072, 2, 393210, 131072, 2, 393209, 131072, 2, 393208, 131072, 2, 393207, 131072, 2, 393206, 131072, 2, 458742, 65537, 2, 458743, 65537, 2, 458744, 65537, 2, 458745, 65537, 2, 458746, 65537, 2, 458747, 65537, 2, 458748, 65537, 2, 458749, 65537, 2, 458750, 65537, 2, 458751, 65537, 2, 393216, 65537, 2, 393217, 65537, 2, 393218, 65537, 2, 393219, 65537, 2, 393220, 65537, 2, 393221, 65537, 2, 393222, 65537, 2, 393223, 65537, 2, 393224, 65537, 2, 393225, 65537, 2, 393226, 65537, 2)
+
+[node name="Background Back Layer" type="TileMap" parent="Map"]
+tile_set = SubResource("TileSet_244ny")
+format = 2
+layer_0/tile_data = PackedInt32Array(262141, 327681, 5, 262142, 393217, 5, 262136, 327681, 5, 262137, 393217, 5)
+
+[node name="Trees" type="TileMap" parent="Map"]
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_244ny")
+format = 2
+layer_0/tile_data = PackedInt32Array(3, 983041, 4, 4, 1048577, 4, 65539, 983041, 5, 65540, 1048577, 5, 1, 983041, 6, 65537, 983041, 7, 2, 1048577, 6, 65538, 1048577, 7, 65532, 983041, 6, 131068, 983041, 7, 65533, 1048577, 6, 131069, 1048577, 7, 65535, 983041, 6, 131071, 983041, 7, 0, 1048577, 6, 65536, 1048577, 7)
+
+[node name="Background Front Layer x2" type="TileMap" parent="Map"]
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_244ny")
+format = 2
+layer_0/tile_data = PackedInt32Array(65533, 589824, 4, 131069, 589824, 5, 131070, 655360, 7, 131071, 131072, 5, 65536, 196608, 5, 65537, 589824, 6, 65538, 589824, 5, 2, 589824, 4)
+
+[node name="Background Front Layer" type="TileMap" parent="Map"]
+rotation = -0.00245663
+tile_set = SubResource("TileSet_244ny")
+format = 2
+layer_0/tile_data = PackedInt32Array(196606, 262145, 4, 262142, 262145, 5)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 3
+texture = ExtResource("7_75epk")
+visibility_rect = Rect2(-500, -200, 200, 200)
+process_material = SubResource("ParticleProcessMaterial_sxoqs")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 2
+position = Vector2(1, 96)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_vwuac")
+autoplay = "default"
+frame_progress = 0.759692
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_jhb10")
+autoplay = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -75.0
+offset_top = 19.0
+offset_right = 75.0
+offset_bottom = 169.0
+grow_horizontal = 2
+texture = ExtResource("10_deutk")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.0
+offset_top = -36.0
+offset_right = 47.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("11_fvr0n")
+text = "Press Enter"
+
+[node name="Text Animation" type="AnimationPlayer" parent="CanvasLayer/Label"]
+libraries = {
+&"": SubResource("AnimationLibrary_awp6w")
+}
+autoplay = "Text Animation"
