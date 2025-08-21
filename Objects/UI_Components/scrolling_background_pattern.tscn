@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bc5rxwu8e0mon"]
+
+[ext_resource type="Shader" uid="uid://b7d2tyvhuiayh" path="res://shaders/scrolling_background_pattern.gdshader" id="1_dro48"]
+[ext_resource type="Shader" uid="uid://jl3o8kgnillk" path="res://shaders/fadeColor.gdshader" id="1_vhirn"]
+[ext_resource type="Texture2D" uid="uid://crmyoyc50dmt3" path="res://Assets/UI/Menu/umbrella_pattern.png" id="2_vhirn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhirn"]
+shader = ExtResource("1_vhirn")
+shader_parameter/fade_start = 0.64
+shader_parameter/fade_end = 0.0
+shader_parameter/vertical_fade = true
+shader_parameter/fade_from_end = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_37oot"]
+shader = ExtResource("1_dro48")
+shader_parameter/speed = 1.795
+
+[node name="ColorRect" type="ColorRect"]
+material = SubResource("ShaderMaterial_vhirn")
+use_parent_material = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.257568, 0.000642449, 0.620125, 1)
+
+[node name="Pattern" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_37oot")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_vhirn")
+expand_mode = 1
+stretch_mode = 1

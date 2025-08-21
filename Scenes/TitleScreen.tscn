@@ -30,7 +30,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/TextureRect:modulate")
+tracks/1/path = NodePath("../Press Enter/TextureRect:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -57,7 +57,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/TextureRect:modulate")
+tracks/1/path = NodePath("../Press Enter/TextureRect:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -435,9 +435,9 @@ frame_progress = 0.759692
 stream = ExtResource("9_jhb10")
 autoplay = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Press Enter" type="CanvasLayer" parent="."]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="TextureRect" type="TextureRect" parent="Press Enter"]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -450,7 +450,7 @@ grow_horizontal = 2
 texture = ExtResource("10_deutk")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="CanvasLayer"]
+[node name="Label" type="Label" parent="Press Enter"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -465,8 +465,10 @@ grow_vertical = 0
 theme_override_fonts/font = ExtResource("11_fvr0n")
 text = "Press Enter"
 
-[node name="Text Animation" type="AnimationPlayer" parent="CanvasLayer/Label"]
+[node name="Text Animation" type="AnimationPlayer" parent="Press Enter/Label"]
 libraries = {
 &"": SubResource("AnimationLibrary_awp6w")
 }
 autoplay = "Text Animation"
+
+[node name="Main Menu" type="CanvasLayer" parent="."]
