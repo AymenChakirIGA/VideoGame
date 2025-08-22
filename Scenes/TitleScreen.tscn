@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ku1g0ji75tcd"]
+[gd_scene load_steps=29 format=3 uid="uid://ku1g0ji75tcd"]
 
 [ext_resource type="Texture2D" uid="uid://bkswfd3cqlh11" path="res://Assets/Levels/Level 0/Clouds/1.png" id="1_pie25"]
 [ext_resource type="Script" uid="uid://cveyi0r77p1kl" path="res://Scenes/Levels/Level_0/CloudLayout.cs" id="2_2jiiu"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://3l1tkxakkth5" path="res://Assets/Sprites/Others/Leaf.png" id="7_75epk"]
 [ext_resource type="Texture2D" uid="uid://cm632y7coop80" path="res://Assets/Sprites/Player/Runny_v2.png" id="8_3ah5x"]
 [ext_resource type="AudioStream" uid="uid://5lymqbtgg5m2" path="res://Assets/OST/OST-01.wav" id="9_jhb10"]
+[ext_resource type="Script" uid="uid://c4btka65q6cfk" path="res://Scripts/UI/PressEnter.cs" id="10_2jiiu"]
 [ext_resource type="Texture2D" uid="uid://cgnrtm6rpvnch" path="res://Assets/UI/Global/The witch with an umbrella.png" id="10_deutk"]
 [ext_resource type="FontFile" uid="uid://ck320q58bkj52" path="res://Assets/Fonts/Poppins/Poppins-Black.ttf" id="11_fvr0n"]
 
@@ -30,7 +31,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Press Enter/TextureRect:modulate")
+tracks/1/path = NodePath("../Title/TitleImage:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -57,7 +58,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Press Enter/TextureRect:modulate")
+tracks/1/path = NodePath("../Title/TitleImage:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -436,19 +437,7 @@ stream = ExtResource("9_jhb10")
 autoplay = true
 
 [node name="Press Enter" type="CanvasLayer" parent="."]
-
-[node name="TextureRect" type="TextureRect" parent="Press Enter"]
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -75.0
-offset_top = 19.0
-offset_right = 75.0
-offset_bottom = 169.0
-grow_horizontal = 2
-texture = ExtResource("10_deutk")
-expand_mode = 1
+script = ExtResource("10_2jiiu")
 
 [node name="Label" type="Label" parent="Press Enter"]
 anchors_preset = 7
@@ -472,3 +461,19 @@ libraries = {
 autoplay = "Text Animation"
 
 [node name="Main Menu" type="CanvasLayer" parent="."]
+
+[node name="Title" type="CanvasLayer" parent="."]
+
+[node name="TitleImage" type="TextureRect" parent="Title"]
+modulate = Color(1, 1, 1, 0)
+z_index = 10
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -75.0
+offset_top = 19.0
+offset_right = 75.0
+offset_bottom = 169.0
+grow_horizontal = 2
+texture = ExtResource("10_deutk")
+expand_mode = 1

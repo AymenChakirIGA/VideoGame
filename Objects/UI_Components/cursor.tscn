@@ -1,0 +1,139 @@
+[gd_scene load_steps=8 format=3 uid="uid://scgk1gwlumfp"]
+
+[ext_resource type="Texture2D" uid="uid://d4i6sn5bg54wc" path="res://Assets/UI/Menu/right-arrow.png" id="1_vyjdw"]
+[ext_resource type="Texture2D" uid="uid://c5idpycvcyu84" path="res://Assets/UI/Menu/cursor_triangles.png" id="2_h2h00"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vyjdw"]
+bg_color = Color(0.505882, 0.592157, 1, 1)
+border_color = Color(0.337255, 0, 0.921569, 1)
+corner_radius_top_left = 2
+corner_radius_bottom_left = 2
+shadow_color = Color(0.0885202, 0.000469347, 0.302921, 1)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="Animation" id="Animation_stmlc"]
+resource_name = "Idle"
+length = 0.6
+loop_mode = 1
+capture_included = true
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1.86607, 2.82843),
+"update": 2,
+"values": [Vector2(7.585, 4), Vector2(4.585, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_vyjdw"]
+resource_name = "Init"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_h2h00"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(7.585, 4)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0e4mt"]
+_data = {
+&"Idle": SubResource("Animation_stmlc"),
+&"Init": SubResource("Animation_vyjdw"),
+&"RESET": SubResource("Animation_h2h00")
+}
+
+[node name="Cursor" type="Control"]
+z_index = -1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 123.0
+offset_bottom = 31.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vyjdw")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = 10
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 7.585
+offset_top = -11.5
+offset_right = 16.585
+offset_bottom = 8.5
+grow_vertical = 2
+texture = ExtResource("1_vyjdw")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="CursorAnimations" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_0e4mt")
+}
+autoplay = "Idle"
+
+[node name="shadow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.271126, 0.2654, 0.999932, 1)
+
+[node name="Rectangles" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 21.05
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("2_h2h00")
+expand_mode = 1
