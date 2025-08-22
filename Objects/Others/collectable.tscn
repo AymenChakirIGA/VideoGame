@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgb3t2b0dn8qc"]
+
+[ext_resource type="Texture2D" uid="uid://bfab47gj0c7aw" path="res://Assets/CoinsV2_outline_18x18res.png" id="1_d3nkk"]
+[ext_resource type="Script" uid="uid://ccbeao520ip1x" path="res://Scripts/Level Obstacles/Collectable.cs" id="1_uwnqe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uwnqe"]
+radius = 10.0499
+
+[node name="Collectable" type="Area2D"]
+script = ExtResource("1_uwnqe")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_d3nkk")
+region_enabled = true
+region_rect = Rect2(0, 0, 18, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_uwnqe")

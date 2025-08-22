@@ -1,5 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://cp4yop42e88nw"]
+[gd_scene load_steps=23 format=3 uid="uid://cp4yop42e88nw"]
 
+[ext_resource type="Script" uid="uid://d1qwjl4ubmut8" path="res://Scenes/Levels/Level_0/Level0.cs" id="1_3216p"]
 [ext_resource type="PackedScene" uid="uid://bf03q4af4885f" path="res://Objects/Player.tscn" id="1_a7hkd"]
 [ext_resource type="PackedScene" uid="uid://dxqfi87se37ik" path="res://Objects/UI_Components/clear_screen.tscn" id="1_b6k65"]
 [ext_resource type="PackedScene" uid="uid://bbkll8h5sfvar" path="res://Objects/UI_Components/pause_menu.tscn" id="1_bcu6k"]
@@ -15,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://bfmjewad3ojq4" path="res://Objects/Others/chearing_companions.tscn" id="12_ghmkd"]
 [ext_resource type="Script" uid="uid://tsl4bjpaw32w" path="res://Scripts/Player/PlayerCamera.cs" id="14_i3ig5"]
 [ext_resource type="PackedScene" uid="uid://dojxh7kdyumn6" path="res://Objects/Others/damage_area.tscn" id="15_xrblt"]
+[ext_resource type="PackedScene" uid="uid://bgb3t2b0dn8qc" path="res://Objects/Others/collectable.tscn" id="17_3216p"]
 [ext_resource type="PackedScene" uid="uid://c1u6owh4kuagv" path="res://Objects/Level Obstacles/state_spikes.tscn" id="17_j1w0r"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i3ig5"]
@@ -68,6 +70,7 @@ background_color = Color(0.12549, 0.615686, 0.94902, 1)
 size = Vector2(1, 690)
 
 [node name="Level0" type="Node2D"]
+script = ExtResource("1_3216p")
 
 [node name="Clear Screen" parent="." instance=ExtResource("1_b6k65")]
 
@@ -210,5 +213,19 @@ position = Vector2(129, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Camera Sections/Switch Areas/Area2D"]
 position = Vector2(-0.5, -151)
 shape = SubResource("RectangleShape2D_bu1fo")
+
+[node name="CoinLabel" type="Label" parent="."]
+modulate = Color(0.623423, 0.742678, 0.179206, 1)
+top_level = true
+offset_left = 590.0
+offset_right = 633.0
+offset_bottom = 23.0
+text = "Coins"
+
+[node name="Collectable2" parent="." instance=ExtResource("17_3216p")]
+position = Vector2(-270, 107)
+
+[node name="Collectable3" parent="." instance=ExtResource("17_3216p")]
+position = Vector2(572, 107)
 
 [connection signal="body_entered" from="Camera Sections/Switch Areas/Area2D" to="Camera2D" method="OnEnterLimitSwitchArea"]

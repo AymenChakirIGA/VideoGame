@@ -32,7 +32,7 @@ size = Vector2(23, 13)
 size = Vector2(20, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ymquf"]
-size = Vector2(24, 62)
+size = Vector2(24, 34)
 
 [sub_resource type="Animation" id="Animation_0ednd"]
 resource_name = "Damage"
@@ -170,7 +170,7 @@ shape = SubResource("RectangleShape2D_bfjbn")
 [node name="Hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(0, -21)
+position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_ymquf")
 debug_color = Color(1, 0.000281276, 0.0838801, 0.42)
 
