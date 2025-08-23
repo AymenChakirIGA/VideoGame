@@ -20,9 +20,9 @@ public partial class Level0 : Node2D
         }
     }
 
-    private void _on_collectable_collected()
+    private void _on_collectable_collected(int value)
     {
-        coinCount++;
+        coinCount += value;
         coinLabel.Text = "Coins: " + coinCount;
         GD.Print($"Coins: {coinCount}");
     }

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0n3s5dn5wj3l"]
+
+[ext_resource type="PackedScene" uid="uid://bgb3t2b0dn8qc" path="res://Objects/Others/collectable.tscn" id="1_2ru8d"]
+
+[node name="Collectable" instance=ExtResource("1_2ru8d")]
+
+[node name="Sprite2D" parent="." index="0"]
+region_rect = Rect2(0, 18, 18, 18)

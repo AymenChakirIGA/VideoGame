@@ -4,7 +4,10 @@ using System;
 public partial class Collectable : Area2D
 {
     [Signal]
-    public delegate void CollectedEventHandler();
+    public delegate void CollectedEventHandler(int value);
+
+    [Export]
+    public int Value { get; set; } = 1; // Default value
 
     public override void _Ready()
     {
@@ -15,7 +18,7 @@ public partial class Collectable : Area2D
     {
         if (body.Name == "Player") 
         {
-            EmitSignal(SignalName.Collected);
+            EmitSignal(SignalName.Collected, Value);
             QueueFree();
         }
     }

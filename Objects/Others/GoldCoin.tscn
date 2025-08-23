@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5qmfjq6gbg2r"]
+
+[ext_resource type="PackedScene" uid="uid://bgb3t2b0dn8qc" path="res://Objects/Others/collectable.tscn" id="1_bcdkj"]
+
+[node name="Collectable" instance=ExtResource("1_bcdkj")]
+Value = 3
