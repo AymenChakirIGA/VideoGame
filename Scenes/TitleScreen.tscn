@@ -460,8 +460,6 @@ libraries = {
 }
 autoplay = "Text Animation"
 
-[node name="Main Menu" type="CanvasLayer" parent="."]
-
 [node name="Title" type="CanvasLayer" parent="."]
 
 [node name="TitleImage" type="TextureRect" parent="Title"]
