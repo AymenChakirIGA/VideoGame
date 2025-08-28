@@ -18,6 +18,8 @@ public partial class Retry : Button
 
 	public override void _Pressed()
 	{
+		GetTree().Paused = false;
+    	this.Visible = false; 
 		GetTree().ReloadCurrentScene();
 	}
 

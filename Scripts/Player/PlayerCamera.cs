@@ -12,7 +12,7 @@ public partial class PlayerCamera : Camera2D
 	[Export] public float zoomSpeed = 0.05f; // Speed of zooming in and out
 	private Array<Node> cameraStartLimits;
 	private Array<Node> cameraEndLimits;
-	private int cameraLimitIndex = 0;
+	private int cameraBoundaryIndex = 0;
 
 	public override void _Ready()
 	{
@@ -28,11 +28,7 @@ public partial class PlayerCamera : Camera2D
 		cameraEndLimits = GetParent().GetNode("Camera Sections").GetNode("End").GetChildren();
 
 		//init Limits
-		Marker2D markerLeft = cameraStartLimits[0] as Marker2D;
-		LimitLeft = (int)markerLeft.Position.X;
-
-		Marker2D markerRight = cameraEndLimits[cameraLimitIndex] as Marker2D;
-		LimitRight = (int)markerRight.Position.X;
+		initCameraPosition();
 	}
 
 	public override void _Process(double delta)
@@ -44,10 +40,10 @@ public partial class PlayerCamera : Camera2D
 		CameraFollowPlayer();
 
 		//Adjust Camera Limits
-		Marker2D markerLeft = cameraStartLimits[cameraLimitIndex] as Marker2D;
+		Marker2D markerLeft = cameraStartLimits[cameraBoundaryIndex] as Marker2D;
 		LimitLeft = (int)Mathf.Lerp(LimitLeft, markerLeft.Position.X, 0.5);
 
-		Marker2D markerRight = cameraEndLimits[cameraLimitIndex] as Marker2D;
+		Marker2D markerRight = cameraEndLimits[cameraBoundaryIndex] as Marker2D;
 		LimitRight = (int)Mathf.Lerp(LimitRight, markerRight.Position.X, 0.5);
 
 	}
@@ -58,6 +54,25 @@ public partial class PlayerCamera : Camera2D
 		cameraPosition.X = Mathf.Lerp(cameraPosition.X, player.Position.X, 0.2f);
 		cameraPosition.Y = Mathf.Lerp(cameraPosition.Y, player.Position.Y, 0.2f);
 		this.Position = cameraPosition;
+	}
+
+	private void initCameraPosition()
+	{
+		while (true)
+		{
+			Marker2D markerLeft = cameraStartLimits[cameraBoundaryIndex] as Marker2D;
+			Marker2D markerRight = cameraEndLimits[cameraBoundaryIndex] as Marker2D;
+			if (this.Position > markerLeft.Position && this.Position < markerRight.Position)
+			{
+				this.LimitLeft = (int)markerLeft.Position.X;
+				this.LimitRight = (int)markerRight.Position.X;
+				break;
+			}
+			else
+			{
+				cameraBoundaryIndex++;	
+			}
+		}
 	}
 
 
@@ -92,10 +107,10 @@ public partial class PlayerCamera : Camera2D
 	{
 		if (body.IsInGroup("Player"))
 		{
-			Marker2D markerLeft = cameraStartLimits[cameraLimitIndex] as Marker2D;
-			Marker2D markerRight = cameraEndLimits[cameraLimitIndex] as Marker2D;
-			if (body.Position.X <= markerRight.Position.X + 50 && body.Position.X >= markerRight.Position.X - 50) cameraLimitIndex++; //50 margin of error
-			else if (body.Position.X <= markerLeft.Position.X + 50 && body.Position.X >= markerLeft.Position.X - 50) cameraLimitIndex--; //50 margin of error
+			Marker2D markerLeft = cameraStartLimits[cameraBoundaryIndex] as Marker2D;
+			Marker2D markerRight = cameraEndLimits[cameraBoundaryIndex] as Marker2D;
+			if (body.Position.X <= markerRight.Position.X + 50 && body.Position.X >= markerRight.Position.X - 50) cameraBoundaryIndex++; //50 margin of error
+			else if (body.Position.X <= markerLeft.Position.X + 50 && body.Position.X >= markerLeft.Position.X - 50) cameraBoundaryIndex--; //50 margin of error
 		}
 	}
 }

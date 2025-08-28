@@ -54,6 +54,7 @@ public partial class PlayerController : CharacterBody2D
 	private Timer meleeTimer;
 	private bool canMelee = true;
 	private bool isMeleeAttacking = false;
+	public bool isInputdisabled = false;
 
 	Health health;
 	[Export]
@@ -106,7 +107,6 @@ public partial class PlayerController : CharacterBody2D
 	}
 	public override void _Process(double delta)
 	{
-		DebugPlayer();
 		if (Input.IsActionPressed("right"))
 			facingDirection = Vector2.Right;
 		else if (Input.IsActionPressed("left"))
@@ -114,6 +114,8 @@ public partial class PlayerController : CharacterBody2D
 
 		if (Input.IsActionJustPressed("shoot"))
 			Shoot();
+		
+		ProcessMode = isInputdisabled? ProcessModeEnum.Disabled : ProcessModeEnum.Pausable; //Disable Process
 
 		//Stamina Process Code
 		StaminaRecovery();
@@ -143,13 +145,13 @@ public partial class PlayerController : CharacterBody2D
 			velocity += GetGravity() * (float)delta * gravityController;
 		}
 
-		//Get the input from the player
+		//Handle Inputs
+
 		direction = !isDashing ? Input.GetVector("left", "right", "up", "down") : dashDirection;
 		//Handle Mouvement: Jumping, Dashing, Wall Jumping
 
 		//Jump and Wall Jump
 		velocity = HandleJump(velocity);
-
 		velocity.Y = HandleGlide(velocity);
 
 		//Dash
@@ -159,7 +161,6 @@ public partial class PlayerController : CharacterBody2D
 		velocity.X = !isKnockedBack ? (!isDashing ? HorizontalMovement(velocity, direction, Speed) : dashDirection.X * 600f) : velocity.X;
 		//Vertical Movement
 		velocity.Y = VerticalMovement(velocity);
-
 		velocity.Y = isWallSliding ? VerticalMovement(velocity) : velocity.Y;
 
 

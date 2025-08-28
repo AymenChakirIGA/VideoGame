@@ -45,6 +45,8 @@ public partial class PauseMenu : CanvasLayer
 
 	private void Restart()
 	{
+		GetTree().Paused = false;
+    	this.Visible = false; 
 		GetTree().ReloadCurrentScene(); // Restart the current scene
 		
 	}
