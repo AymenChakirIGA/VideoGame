@@ -19,6 +19,7 @@ public partial class Collectable : Area2D
         if (body.Name == "Player") 
         {
             EmitSignal(SignalName.Collected, Value);
+            Hud.numberOfCoins++;
             QueueFree();
         }
     }

@@ -1,60 +1,37 @@
-[gd_scene load_steps=7 format=3 uid="uid://cued7siu7scq"]
+[gd_scene load_steps=3 format=3 uid="uid://cued7siu7scq"]
 
 [ext_resource type="Script" uid="uid://bbhpwglcexvaf" path="res://Scripts/UI/Hud.cs" id="1_f8y1k"]
-[ext_resource type="Texture2D" uid="uid://iyftyt6kcr3w" path="res://Assets/UI/HUD/Triangle.png" id="1_gawjf"]
-[ext_resource type="FontFile" uid="uid://blmcew08ljhhh" path="res://Assets/Fonts/FOT-Chiaro Std B.ttf" id="2_b0qx4"]
 [ext_resource type="FontFile" uid="uid://bpal1rtbq5tvt" path="res://Assets/Fonts/Poppins/Poppins-BlackItalic.ttf" id="2_bfhu2"]
-[ext_resource type="Texture2D" uid="uid://d3ssnv31s83pw" path="res://Assets/UI/HUD/Weather/Night.png" id="3_o71ym"]
-[ext_resource type="Texture2D" uid="uid://bjw4joy347ykk" path="res://Assets/UI/HUD/Weather/Sunny.png" id="4_4ymhq"]
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer"]
 layer = 0
 script = ExtResource("1_f8y1k")
-Sunny = ExtResource("4_4ymhq")
-Night = ExtResource("3_o71ym")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -164.0
-offset_top = -22.0
-offset_right = 34.0
-offset_bottom = 112.0
+offset_left = -155.0
+offset_bottom = 89.0
 grow_horizontal = 0
-texture = ExtResource("1_gawjf")
-expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -19.0
-offset_top = 3.0
-offset_right = -13.0
-offset_bottom = 9.0
-grow_horizontal = 0
-texture = ExtResource("4_4ymhq")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -62.0
-offset_top = 9.0
-offset_right = -13.0
-offset_bottom = 32.0
-grow_horizontal = 0
+[node name="ActName" type="Label" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_fonts/font = ExtResource("2_bfhu2")
 text = "ACT 1"
 
-[node name="Label2" type="Label" parent="."]
-offset_left = 630.0
-offset_top = 4.0
-offset_right = 675.0
-offset_bottom = 27.0
-scale = Vector2(0.2, 0.2)
-theme_override_fonts/font = ExtResource("2_b0qx4")
-theme_override_font_sizes/font_size = 0
-text = "00:00"
+[node name="TimerLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bfhu2")
+text = "Timer: 00:00:00"
+
+[node name="Coins" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bfhu2")
+text = "Coins: 0"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="OnTimeout"]
