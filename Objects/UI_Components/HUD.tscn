@@ -14,21 +14,35 @@ anchor_right = 1.0
 offset_left = -155.0
 offset_bottom = 89.0
 grow_horizontal = 0
+theme_override_constants/separation = -5
 
-[node name="ActName" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TimerTitle" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.505882, 0.592157, 1, 1)
+theme_override_fonts/font = ExtResource("2_bfhu2")
+text = "Timer:"
+
+[node name="TimerValue" type="Label" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_bfhu2")
-text = "ACT 1"
+text = "00:00:00"
 
-[node name="TimerLabel" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CoinsTitle" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.505882, 0.592157, 1, 1)
+theme_override_fonts/font = ExtResource("2_bfhu2")
+text = "Coins:"
+
+[node name="CoinsValue" type="Label" parent="VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_bfhu2")
-text = "Timer: 00:00:00"
-
-[node name="Coins" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_bfhu2")
-text = "Coins: 0"
+text = "0"
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.1
