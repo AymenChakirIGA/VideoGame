@@ -172,10 +172,10 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.4,
 "texture": SubResource("AtlasTexture_wlxil")
 }, {
-"duration": 1.0,
+"duration": 0.8,
 "texture": SubResource("AtlasTexture_vbn0t")
 }],
 "loop": true,
@@ -416,8 +416,8 @@ shape = SubResource("RectangleShape2D_tjrg2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ovccg")
-animation = &"Melee_1"
-frame_progress = 0.562442
+animation = &"Melee_3"
+frame_progress = 0.66788
 
 [node name="RayCast2DLeft" type="RayCast2D" parent="."]
 rotation = 1.5708
@@ -493,7 +493,7 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[node name="MeleeArea" type="Area2D" parent="."]
+[node name="MeleeArea" type="Area2D" parent="." groups=["Melee"]]
 visible = false
 monitoring = false
 

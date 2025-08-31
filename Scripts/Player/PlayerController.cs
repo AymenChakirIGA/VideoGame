@@ -52,7 +52,6 @@ public partial class PlayerController : CharacterBody2D
 	private bool isFatigued = false;
 	private Area2D meleeArea;
 	private Timer meleeTimer;
-	private bool canMelee = true;
 	private bool isMeleeAttacking = false;
 	public bool isInputdisabled = false;
 
@@ -97,6 +96,7 @@ public partial class PlayerController : CharacterBody2D
 		meleeArea.AddToGroup("melee");
 		meleeArea.Monitoring = false;
 		meleeArea.Visible = false;
+		meleeArea.Monitorable = false;
 
 		// Add a timer for melee cooldown/duration
 		meleeTimer = new Timer();
@@ -105,7 +105,7 @@ public partial class PlayerController : CharacterBody2D
 		AddChild(meleeTimer);
 		meleeTimer.Timeout += OnMeleeTimerTimeout;
 	}
-	public override void _Process(double delta)
+	public override async void _Process(double delta)
 	{
 		if (Input.IsActionPressed("right"))
 			facingDirection = Vector2.Right;
@@ -128,7 +128,7 @@ public partial class PlayerController : CharacterBody2D
 		BookAnimation();
 
 		// Melee attack input
-		if (Input.IsActionJustPressed("melee") && canMelee)
+		if (Input.IsActionJustPressed("melee") && !isMeleeAttacking)
 		{
 			MeleeAttack();
 		}
@@ -257,7 +257,7 @@ public partial class PlayerController : CharacterBody2D
 
 	private float HandleGlide(Vector2 velocity)
 	{
-		if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && !isFatigued && Stamina > 0f)
+		if (!IsOnFloor() && Input.IsActionPressed("Jump") && canGlide && !isFatigued && Stamina > 0f && !isMeleeAttacking)
 		{
 			//Gliding when it's not on floor
 			Stamina -= 0.5f;
@@ -293,13 +293,11 @@ public partial class PlayerController : CharacterBody2D
 		if (direction != Vector2.Zero)
 		{
 			velocity.X += direction.X * acceleration;
-			// velocity.Y +=  direction.Y *  acceleration;
 			velocity.X = Math.Clamp(velocity.X, -Speed, Speed); // ensure that the speed dosn't exceed it limit
 		}
 		else
 		{
 			velocity.X = Mathf.Lerp(velocity.X, 0, friction);
-			// velocity.Y = Mathf.Lerp(velocity.Y, 0, friction);
 		}
 
 		//Running System
@@ -411,11 +409,15 @@ public partial class PlayerController : CharacterBody2D
 		}
 
 		//Time to Animate
-		if (direction.X != 0 && !isRunning && this.IsOnFloor())
+		if (direction.X != 0 && !isRunning && this.IsOnFloor() && !isMeleeAttacking)
 		{
 			sprite.Play("Walk");
 		}
-		else if (isRunning && this.IsOnFloor())
+		else if (isMeleeAttacking)
+		{
+			sprite.Play("Melee_3");
+		}
+		else if (isRunning && this.IsOnFloor() && !isMeleeAttacking)
 		{
 			sprite.Play("Run");
 		}
@@ -493,26 +495,18 @@ public partial class PlayerController : CharacterBody2D
 
 	private void MeleeAttack()
 	{
-		// Reset all slimes' melee flags before a new attack
-		foreach (var slime in GetTree().GetNodesInGroup("mobs"))
-		{
-			if (slime is Slime s)
-				s.ResetMeleeHit();
-		}
-
-		canMelee = false;
+		meleeArea.Monitorable = true;
 		isMeleeAttacking = true;
 		meleeArea.Monitoring = true;
 		meleeArea.Visible = true;
 		meleeTimer.Start();
-		sprite.Play("Melee_1");
 	}
 
 	private void OnMeleeTimerTimeout()
 	{
 		meleeArea.Monitoring = false;
 		meleeArea.Visible = false;
-		canMelee = true;
+		meleeArea.Monitorable = false;
 		isMeleeAttacking = false;
 	}
 

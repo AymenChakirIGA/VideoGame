@@ -160,12 +160,8 @@ public partial class Slime : CharacterBody2D
         // Melee damage
         if (area.IsInGroup("melee"))
         {
-            var player = area.GetParent() as PlayerController;
-            if (player != null && player.IsMeleeAttacking() && !hitByMelee)
-            {
-                hitByMelee = true;
-                TakeDamage(1);
-            }
+            this.isHitDirectionRight = area.Position.X > Position.X;
+            TakeDamage(1);
         }
         // Bullet damage
         if (area.IsInGroup("bullets"))
@@ -174,11 +170,6 @@ public partial class Slime : CharacterBody2D
             TakeDamage(1);
             area.QueueFree();
         }
-    }
-
-    public void ResetMeleeHit()
-    {
-        hitByMelee = false;
     }
 
     public void TakeDamage(int amount)
