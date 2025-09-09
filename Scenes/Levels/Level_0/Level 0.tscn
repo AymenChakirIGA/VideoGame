@@ -145,12 +145,12 @@ layer_0/tile_data = PackedInt32Array(196608, 196608, 5, 262143, 131072, 5, 11, 5
 [node name="Enemies" type="Node" parent="."]
 
 [node name="Slime" parent="Enemies" instance=ExtResource("7_ro4y0")]
-position = Vector2(48, 47)
+position = Vector2(-287, 112)
 scale = Vector2(1.5, 1.5)
 speed = 250.0
 
 [node name="Player" parent="." instance=ExtResource("1_a7hkd")]
-position = Vector2(-55, 108)
+position = Vector2(-56, 96)
 scale = Vector2(2, 2)
 
 [node name="Checkpoint" parent="." instance=ExtResource("10_gbidr")]

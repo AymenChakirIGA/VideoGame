@@ -101,7 +101,7 @@ public partial class PlayerController : CharacterBody2D
 		// Add a timer for melee cooldown/duration
 		meleeTimer = new Timer();
 		meleeTimer.OneShot = true;
-		meleeTimer.WaitTime = 0.2f; // Melee active duration
+		meleeTimer.WaitTime = 0.05f; // Melee active duration
 		AddChild(meleeTimer);
 		meleeTimer.Timeout += OnMeleeTimerTimeout;
 	}
@@ -397,6 +397,7 @@ public partial class PlayerController : CharacterBody2D
 		{
 			isFacingRight = false;
 			sprite.FlipH = true;
+			meleeArea.Scale = new Vector2(-1, 1);
 			// Move muzzle to the left
 			muzzle.Position = new Vector2(-Math.Abs(muzzle.Position.X), muzzle.Position.Y);
 		}
@@ -404,6 +405,7 @@ public partial class PlayerController : CharacterBody2D
 		{
 			isFacingRight = true;
 			sprite.FlipH = false;
+			meleeArea.Scale = new Vector2(1, 1);
 			// Move muzzle to the right
 			muzzle.Position = new Vector2(Math.Abs(muzzle.Position.X), muzzle.Position.Y);
 		}

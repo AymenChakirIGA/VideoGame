@@ -152,6 +152,7 @@ bg_color = Color(0.936843, 3.82639e-06, 1.15514e-06, 1)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_ucpgg")
+patrollingRange = PackedInt32Array(50, 50)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_3xbco")
@@ -181,6 +182,7 @@ libraries = {
 
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.003
+one_shot = true
 
 [node name="Health" type="Control" parent="."]
 layout_mode = 3
@@ -203,8 +205,13 @@ show_percentage = false
 [node name="HealthBarAnimationTimer" type="Timer" parent="Health"]
 wait_time = 0.5
 
+[node name="KnockbackTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
 [connection signal="area_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
-[connection signal="timeout" from="DamageTimer" to="." method="onTimerTimout"]
+[connection signal="timeout" from="DamageTimer" to="." method="onDamageTimerTimout"]
 [connection signal="timeout" from="Health/HealthBarAnimationTimer" to="." method="onHeathBarAnimationTimeOut"]
+[connection signal="timeout" from="KnockbackTimer" to="." method="OnKnockbackTimeout"]

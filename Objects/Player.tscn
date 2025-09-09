@@ -399,7 +399,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0ryu0"]
-size = Vector2(12, 20)
+size = Vector2(7, 31)
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 50
@@ -494,14 +494,12 @@ wait_time = 2.0
 one_shot = true
 
 [node name="MeleeArea" type="Area2D" parent="." groups=["Melee"]]
-visible = false
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeArea"]
-position = Vector2(12, 2)
+position = Vector2(9.5, -3.5)
 shape = SubResource("RectangleShape2D_0ryu0")
 
 [connection signal="timeout" from="KnockedBackTimer" to="." method="OnKnockedBackTimerTimeout"]
 [connection signal="timeout" from="BlinkTimer" to="." method="OnBlinkTimeout"]
 [connection signal="timeout" from="InvincibleTimer" to="." method="OnInvincibleTimeout"]
-[connection signal="area_entered" from="MeleeArea" to="." method="_on_melee_area_area_entered"]
