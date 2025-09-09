@@ -3,8 +3,8 @@ using Godot;
 
 public partial class Enemy : CharacterBody2D
 {
-    protected enum EnemyStates { Idle, Patrolling, Alerted, Dying, TakenDamage }
-    protected EnemyStates currentState = EnemyStates.Patrolling;
+    protected enum EnemyStates { Idle, Patrol, Alert, Dead, TakenDamage }
+    protected EnemyStates currentState = EnemyStates.Patrol;
 
     //Patrolling State
     [Export] protected int[] patrollingRange = [0, 0];
@@ -26,21 +26,28 @@ public partial class Enemy : CharacterBody2D
     private float alphaValue = 0f;
     protected bool isHealthBarShow = false;
     protected AnimationPlayer animationPlayer;
+    protected AnimatedSprite2D animatedSprite;
     protected Timer damageTimer;
     protected Timer knockbackTimer;
-
+    protected CollisionShape2D collision;
+    private float deathVerticalVelocity = -150f; // Initial pop-up speed
+    private float deathGravity = 500f;           // Pull-down force
 
     protected void Initialize()
     {
         initialPosition = Position;
         currentHealth = maxHealth;
-        currentState = EnemyStates.Patrolling;
+        currentState = EnemyStates.Patrol;
         animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-        damageTimer = GetNode<Timer>("DamageTimer");
-        knockbackTimer = GetNode<Timer>("KnockbackTimer");
+        animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        damageTimer = GetNode("Timers").GetNode<Timer>("DamageTimer");
+        knockbackTimer = GetNode("Timers").GetNode<Timer>("KnockbackTimer");
         healthBar = GetNode("Health").GetNode<ProgressBar>("ProgressBar");
         healthBarTimerAnimation = GetNode("Health").GetNode<Timer>("HealthBarAnimationTimer");
+        collision = GetNode<CollisionShape2D>("CollisionShape2D");
         animationPlayer.AnimationFinished += OnAnimationFinished;
+        currentHealth = maxHealth;
+        healthBar.Value = 100f;
     }
 
     protected void Process()
@@ -51,7 +58,7 @@ public partial class Enemy : CharacterBody2D
 
     public void OnAreaBodyEntered(Node2D body)
     {
-        if (body.IsInGroup("Player") && currentState != EnemyStates.Dying)
+        if (body.IsInGroup("Player") && currentState != EnemyStates.Dead)
         {
             (body as PlayerController)?.TakeDamage(1);
         }
@@ -84,8 +91,13 @@ public partial class Enemy : CharacterBody2D
 
 
     //States Behaviors
-    protected void Patrolling()
+    protected void Patrol()
     {
+        //Animation
+        if (animationPlayer.HasAnimation("Patrol"))
+        {
+            animationPlayer.Play("Patrol");
+        }
         if (isFacingRight)
         {
             Position = new Vector2(Position.X + patrolSpeed * (float)GetProcessDeltaTime(), Position.Y);
@@ -106,7 +118,7 @@ public partial class Enemy : CharacterBody2D
         }
     }
 
-    protected void Alerted()
+    protected void Alert()
     {
         // Follow Player
         PlayerController player = GetTree().CurrentScene.GetNodeOrNull<PlayerController>("Player");
@@ -127,8 +139,28 @@ public partial class Enemy : CharacterBody2D
     {
         if (damageTimer.IsStopped())
         {
-            currentState = EnemyStates.Patrolling;
+            currentState = EnemyStates.Patrol;
         }
+    }
+
+    protected void Dead()
+    {
+         // Play animation once
+            if (!animationPlayer.IsPlaying())
+                animationPlayer.Play("Death");
+
+            // Disable collision
+            collision.Disabled = true;
+
+            // Apply vertical "bounce" motion
+            Position += new Vector2(10f * (float)GetProcessDeltaTime(), deathVerticalVelocity * (float)GetProcessDeltaTime());
+            deathVerticalVelocity += deathGravity * (float)GetProcessDeltaTime();
+
+            Rotation += (float)GetProcessDeltaTime() * 10f; // Rotate slowly while dying
+
+            // Stop velocity
+            Velocity = Vector2.Zero;
+        
     }
 
     //Switching States Conditions
@@ -147,7 +179,7 @@ public partial class Enemy : CharacterBody2D
         //Check if dead
         if (currentHealth <= 0)
         {
-            currentState = EnemyStates.Dying;
+            currentState = EnemyStates.Dead;
             animationPlayer.Play("Death"); ;
         }
         else

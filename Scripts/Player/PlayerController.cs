@@ -40,6 +40,7 @@ public partial class PlayerController : CharacterBody2D
 	[Export] public PackedScene GameOverScene;
 	[Export] PackedScene heartGUI;
 	private PlayerCamera playerCamera;
+	private AnimationPlayer animationPlayer;
 	private bool wasOnFloor = false;
 	private bool isWallSliding = false;
 	private bool isRunning = false;
@@ -78,7 +79,7 @@ public partial class PlayerController : CharacterBody2D
 		bookAnimationPlayer = bookSprite.GetNode<AnimationPlayer>("AnimationPlayer");
 		BookShootTimer = bookSprite.GetNode<Timer>("ShootAnimationTimer");
 		playerCamera = GetParent().GetNode<PlayerCamera>("Camera2D");
-
+		animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		//Init Variables
 		currentHealth = maxHealth;
 		spawnPosition = Position;
@@ -396,7 +397,7 @@ public partial class PlayerController : CharacterBody2D
 		if (isFacingRight && direction.X < 0)
 		{
 			isFacingRight = false;
-			sprite.FlipH = true;
+			animationPlayer.Play("Flip");
 			meleeArea.Scale = new Vector2(-1, 1);
 			// Move muzzle to the left
 			muzzle.Position = new Vector2(-Math.Abs(muzzle.Position.X), muzzle.Position.Y);
@@ -404,7 +405,7 @@ public partial class PlayerController : CharacterBody2D
 		else if (!isFacingRight && direction.X > 0)
 		{
 			isFacingRight = true;
-			sprite.FlipH = false;
+			animationPlayer.PlayBackwards("Flip");
 			meleeArea.Scale = new Vector2(1, 1);
 			// Move muzzle to the right
 			muzzle.Position = new Vector2(Math.Abs(muzzle.Position.X), muzzle.Position.Y);

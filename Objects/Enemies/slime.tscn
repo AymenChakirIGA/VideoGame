@@ -3,37 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
 [ext_resource type="Script" uid="uid://bp57ra1ohjf86" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_33v43"]
-atlas = ExtResource("1_ggphh")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vrkao"]
-atlas = ExtResource("1_ggphh")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_3xbco"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_33v43")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vrkao")
-}],
-"loop": true,
-"name": &"Idle",
-"speed": 5.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6mfy"]
-size = Vector2(23, 13)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bfjbn"]
-size = Vector2(20, 11)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ymquf"]
-size = Vector2(24, 34)
-
 [sub_resource type="Animation" id="Animation_0ednd"]
 resource_name = "Damage"
 tracks/0/type = "value"
@@ -136,6 +105,15 @@ _data = {
 &"RESET": SubResource("Animation_banyi")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6mfy"]
+size = Vector2(23, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bfjbn"]
+size = Vector2(20, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ymquf"]
+size = Vector2(24, 34)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fedjo"]
 bg_color = Color(0.109341, 0.109341, 0.109341, 0.588235)
 corner_radius_top_left = 1
@@ -148,15 +126,38 @@ anti_aliasing_size = 0.01
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftc5r"]
 bg_color = Color(0.936843, 3.82639e-06, 1.15514e-06, 1)
 
-[node name="Slime" type="CharacterBody2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_33v43"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrkao"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3xbco"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_33v43")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrkao")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Slime" type="CharacterBody2D" groups=["mobs"]]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_ucpgg")
 patrollingRange = PackedInt32Array(50, 50)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_3xbco")
-animation = &"Idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fj70v")
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 1.5)
@@ -174,15 +175,6 @@ shape = SubResource("RectangleShape2D_bfjbn")
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_ymquf")
 debug_color = Color(1, 0.000281276, 0.0838801, 0.42)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_fj70v")
-}
-
-[node name="DamageTimer" type="Timer" parent="."]
-wait_time = 0.003
-one_shot = true
 
 [node name="Health" type="Control" parent="."]
 layout_mode = 3
@@ -205,13 +197,23 @@ show_percentage = false
 [node name="HealthBarAnimationTimer" type="Timer" parent="Health"]
 wait_time = 0.5
 
-[node name="KnockbackTimer" type="Timer" parent="."]
+[node name="Timers" type="Node" parent="."]
+
+[node name="DamageTimer" type="Timer" parent="Timers"]
+wait_time = 0.003
+one_shot = true
+
+[node name="KnockbackTimer" type="Timer" parent="Timers"]
 wait_time = 0.2
 one_shot = true
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_3xbco")
+animation = &"Idle"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
 [connection signal="area_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
-[connection signal="timeout" from="DamageTimer" to="." method="onDamageTimerTimout"]
 [connection signal="timeout" from="Health/HealthBarAnimationTimer" to="." method="onHeathBarAnimationTimeOut"]
-[connection signal="timeout" from="KnockbackTimer" to="." method="OnKnockbackTimeout"]
+[connection signal="timeout" from="Timers/DamageTimer" to="." method="onDamageTimerTimout"]
+[connection signal="timeout" from="Timers/KnockbackTimer" to="." method="OnKnockbackTimeout"]
