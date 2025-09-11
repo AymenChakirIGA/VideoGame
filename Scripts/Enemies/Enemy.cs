@@ -94,10 +94,10 @@ public partial class Enemy : CharacterBody2D
     protected void Patrol()
     {
         //Animation
-        if (animationPlayer.HasAnimation("Patrol"))
-        {
-            animationPlayer.Play("Patrol");
-        }
+        if (animationPlayer.HasAnimation("Patrol")) animationPlayer.Play("Patrol");
+        if (animatedSprite.SpriteFrames.HasAnimation("Patrol")) animatedSprite.Play("Patrol");
+
+        //Patrolling Logic
         if (isFacingRight)
         {
             Position = new Vector2(Position.X + patrolSpeed * (float)GetProcessDeltaTime(), Position.Y);
@@ -120,6 +120,11 @@ public partial class Enemy : CharacterBody2D
 
     protected void Alert()
     {
+        //Animation
+        if (animationPlayer.HasAnimation("Alert")) animationPlayer.Play("Alert");
+        if (animatedSprite.SpriteFrames.HasAnimation("Alert")) animatedSprite.Play("Alert");
+
+        //Alert Logic
         // Follow Player
         PlayerController player = GetTree().CurrentScene.GetNodeOrNull<PlayerController>("Player");
         if (player != null)
@@ -137,6 +142,11 @@ public partial class Enemy : CharacterBody2D
 
     protected void TakenDamage()
     {
+        //Animation
+        if (animationPlayer.HasAnimation("TakenDamage")) animationPlayer.Play("TakenDamage");
+        if (animatedSprite.SpriteFrames.HasAnimation("TakenDamage")) animatedSprite.Play("TakenDamage");
+
+        //Logic
         if (damageTimer.IsStopped())
         {
             currentState = EnemyStates.Patrol;
@@ -145,10 +155,13 @@ public partial class Enemy : CharacterBody2D
 
     protected void Dead()
     {
-         // Play animation once
-            if (!animationPlayer.IsPlaying())
-                animationPlayer.Play("Death");
+        //Animation
+        if (animationPlayer.HasAnimation("Death")) animationPlayer.Play("Death");
+        if (animatedSprite.SpriteFrames.HasAnimation("Death")) animatedSprite.Play("Death");
 
+        //Logic
+        // Play animation once
+        if (!animationPlayer.IsPlaying())
             // Disable collision
             collision.Disabled = true;
 

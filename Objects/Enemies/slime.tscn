@@ -1,22 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://du2f7dtt6qmpv"]
+[gd_scene load_steps=21 format=3 uid="uid://du2f7dtt6qmpv"]
 
 [ext_resource type="Texture2D" uid="uid://dlyhqe70gs8is" path="res://Assets/Sprites/Enemies/Slime.png" id="1_ggphh"]
 [ext_resource type="Script" uid="uid://bp57ra1ohjf86" path="res://Scripts/Enemies/Slime.cs" id="1_ucpgg"]
 
 [sub_resource type="Animation" id="Animation_0ednd"]
 resource_name = "Damage"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0333333, 0.5, 0.933333),
-"transitions": PackedFloat32Array(1, 1, 2.2974, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 0.55255, 0.488891, 1), Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_qdclg"]
 resource_name = "Death"
@@ -126,25 +114,82 @@ anti_aliasing_size = 0.01
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftc5r"]
 bg_color = Color(0.936843, 3.82639e-06, 1.15514e-06, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_33v43"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ftc5r"]
 atlas = ExtResource("1_ggphh")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vrkao"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fedjo"]
 atlas = ExtResource("1_ggphh")
 region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6le0"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qik35"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu0bi"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymr14"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3yw5p"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jx0gf"]
+atlas = ExtResource("1_ggphh")
+region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_3xbco"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_33v43")
+"texture": SubResource("AtlasTexture_ftc5r")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vrkao")
+"texture": SubResource("AtlasTexture_fedjo")
+}],
+"loop": true,
+"name": &"Alert",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6le0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qik35")
 }],
 "loop": true,
 "name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_cu0bi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymr14")
+}],
+"loop": true,
+"name": &"Patrol",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_3yw5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jx0gf")
+}],
+"loop": true,
+"name": &"TakenDamage",
 "speed": 5.0
 }]
 
@@ -209,7 +254,8 @@ one_shot = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_3xbco")
-animation = &"Idle"
+animation = &"TakenDamage"
+frame_progress = 0.297315
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="OnAnimationFinished"]
 [connection signal="body_entered" from="Area2D" to="." method="OnAreaBodyEntered"]
